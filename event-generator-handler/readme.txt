@@ -1,0 +1,1 @@
+Dit is de applicatie die IOT-data van de mqtt 
