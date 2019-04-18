@@ -1,0 +1,29 @@
+{
+	"verion-api" : "1.0"   						[float]		//version number 
+	"timestamp" : "[YYYY-MM-DD HH:MM:SS UTC]" 	[string]	//timestamp
+	"identifier" : "warmtepomp-001" 			[string] 	//unique identifier of device
+	"buffer" : [		!optional				[array] 	//array of the members of the data. Each member should be an array with records with timestamp and value's. 
+		"gps","motor"							[string]	//This value should be filled if using the buffer construction											
+		]
+	"data" : { 												//De data is stored here. See below for more information! 
+		
+	}
+	sensors:[												//This is an list consisting of all the sensor the IOT-device is connected to. 
+		{
+			"sensor-name": "true/false"    		[boolean]	//When the IOT-device loses connection to a sensor it should set the value to false. If it reconnects is should be set to true. 
+		},			
+		{
+			"sensor-name2": "true/false"
+		}
+	]
+}
+
+"data":{
+		
+}
+
+
+
+
+
+

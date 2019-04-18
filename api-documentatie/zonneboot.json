@@ -1,0 +1,39 @@
+{
+	timestamp:	[YYYY-MM-DD HH:MM:SS UTC],
+	gps: 
+	{
+		long: 	[longitude van de zonneboot],
+		lat: 	[latitude van de zonneboot]
+	},
+	imu: 
+	{
+		x:	[pitch van de zonneboot],
+		y:	[roll van de zonneboot],
+		z:	[yaw van de zonneboot]
+	},
+	thrt:
+	{
+		a:	[angle of throttle]
+	},
+	bms:
+	{
+		 ccl:	[charge current limit],
+		dcl:	[discarge current limit],
+		q:	[charge  in coulomb]
+	},
+	motor:
+	{
+		rpm:	[rounds per minute]
+	},
+	mppt:
+	{
+		[
+			{
+				name:	[naam van power tracker],
+				c:	[temperatuur in Celsius],
+				pmpp:	[power op de mpp]
+			}
+		],
+		...
+	}
+}

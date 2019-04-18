@@ -1,0 +1,88 @@
+{
+	"version-events" : "1.0" 					[float] 	//verion number of the events api
+	"timestamp" : "[YYYY-MM-DD HH:MM:SS UTC]" 	[string] 	//timestamp
+	"identifier" : "warmtepomp-001" 			[string] 	//unique identifier of IOT device 
+	events [ 												//list of all events that have been created
+		type: "" 								[string] 	//type of event see list below for extra info 
+		message: "" 							[string] 	//message that is send with the type
+	]
+}
+
+{ //sensor-off event
+	version-events: "1.0" 									//verion number of the events api
+	timestamp: "[YYYY-MM-DD HH:MM:SS UTC]" 					//timestamp
+	identifier: "warmtepomp-001" 							//unique identifier of IOT device 
+	events [
+		{
+			type: "sensor-off"								//this event gets called when a sensor has been turned off.
+			message: "/sensor-name/ has turned off"
+		}
+	]
+}
+{ //sensor-on event
+	version-events: "1.0" 									//verion number of the events api
+	timestamp: "[YYYY-MM-DD HH:MM:SS UTC]" 					//timestamp
+	identifier: "warmtepomp-001" 							//unique identifier of IOT device 
+	events [
+		{
+			type: "sensor-on"								//this event gets called when a sensor has been turned off.
+			message: "/sensor-name/ has turned on" 
+		}
+	]
+}
+{ //connection-lost event
+	version-events: "1.0" 									//verion number of the events api
+	timestamp: "[YYYY-MM-DD HH:MM:SS UTC]" 					//timestamp
+	identifier: "warmtepomp-001" 							//unique identifier of IOT device 
+	events [
+		{
+			type: "connection-lost"							//this event gets called when the API hasn't received an message from an IOT-device in x seconds 
+			message: "/identifier/ has lost connection last call was at /last timestamp/" 
+		}
+	]
+}
+{ //onnection-reastablised event
+	version-events: "1.0" 									//verion number of the events api
+	timestamp: "[YYYY-MM-DD HH:MM:SS UTC]" 					//timestamp
+	identifier: "warmtepomp-001" 							//unique identifier of IOT device 
+	events [
+		{
+			type: "connection-reastablised"					//this event gets called when the API receives a message from an IOT-device after the connection has been lost 
+			message: "/identifier/ has reastablised connection, /identifier/'s previous call was at /last timestamp/" 
+		}
+	]
+}
+{ //value-odd event
+	version-events: "1.0" 									//verion number of the events api
+	timestamp: "[YYYY-MM-DD HH:MM:SS UTC]" 					//timestamp
+	identifier: "warmtepomp-001" 							//unique identifier of IOT device 
+	events [
+		{
+			type: "value-odd"								//this event gets called when an value is odd
+			message: "/identifier/ has weird value gps:{latitute:-888}[range=1,20]" 
+		}
+	]
+}
+{ //wrong-metadata event
+	version-events: "1.0" 									//verion number of the events api
+	timestamp: "[YYYY-MM-DD HH:MM:SS UTC]" 					//timestamp
+	identifier: "warmtepomp-001" 							//unique identifier of IOT device 
+	events [
+		{
+			type: "wrong-metadata"							//this event gets called when data is received with wrong metadata 
+			message: "identifier /name of identifier/ tried to push wrong metadata: wrong version should be 1.0"
+		}
+	]
+}
+{ //new-device event
+	version-events: "1.0" 									//verion number of the events api
+	timestamp: "[YYYY-MM-DD HH:MM:SS UTC]" 					//timestamp
+	identifier: "warmtepomp-001" 							//unique identifier of IOT device 
+	events [
+		{
+			type: "new-device"								//this event gets called when an IOT-device pushes data for the first time
+			message: "a new device has been added with identifier /identifier/"
+		}
+	]
+}
+
