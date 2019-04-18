@@ -1,1 +1,1 @@
- docker run -it --rm --name sendlab-ubuntu sendlab/ubuntu
+ docker run -it --rm -p 1883:1883 --name sendlab-ubuntu sendlab/ubuntu
