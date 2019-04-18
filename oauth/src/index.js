@@ -13,6 +13,7 @@ var users = [
         role: "admin",
         passwordHashed: "c6f038f9265cd8d9ecb841948c7086da3e716b2c5e95a1e9a1a8d20d63ff09627913cc88a7d479a8fde261de6ee650702dfa5c669d7583a3c9f7d09457f07a80",
         salt: "492330363fbed184b7f574e84d283f4b3507d7a8a3d7e2c9635d08529c6c3716346f3eb5b9397ec03596ffa043c18fb4ec7e1ee53cfed9fa9e994bb1970b326d",
+        twoWayAuthSeed: "07414149916e647534c77133e4369496", //base32  A5AUCSMRNZSHKNGHOEZ6INUUSY,
         refresh_token: null
     }
 ]
@@ -62,16 +63,24 @@ function createTokens(id, role) {
 }
 
 app.post("/login", (request, response) => {
-    console.log(request.body)
     const userName = request.body.userName;
     const password = request.body.password;
+    const timeCode = Math.trunc(Date.now() / 30000).toString(16).padStart(16,'0');
+    const hotp = request.body.hotp;
 
     users = users.map((user) => {
         if (emailCompair(request.body.userName, userName)) {
             if (hash(password, user.salt).hash === user.passwordHashed) {
-                const tokens = createTokens(user.id, user.role);
-                user.refresh_token = tokens.refresh_token;
-                response.send(tokens);
+                const HMAC = crypto.createHmac('sha1', new Buffer(user.twoWayAuthSeed,"hex")).update(new Buffer(timeCode, "hex")).digest();
+                const HOTP = truncate(HMAC).toString().padStart(6,"0");
+
+                if(hotp === HOTP){
+                    const tokens = createTokens(user.id, user.role);
+                    user.refresh_token = tokens.refresh_token;
+                    response.send(tokens);
+                    return user;
+                }
+                response.status(500).send("nope");
                 return user;
             }
             response.status(500).send("nope");
@@ -111,4 +120,14 @@ function emailCompair(email1, email2) {
     const e2 = email2.trim();
 
     return (e1.toLocaleLowerCase() === e2.toLocaleLowerCase());
+}
+
+function truncate(hmac) {
+    let offset = hmac[19] & 0xf;
+    const truncatedHash =
+        (hmac[offset] & 0x7f) << 24 |
+        (hmac[offset + 1] & 0xff) << 16 |
+        (hmac[offset + 2] & 0xff) << 8 |
+        (hmac[offset + 3] & 0xff)
+    return truncatedHash % Math.pow(10, 6);
 }

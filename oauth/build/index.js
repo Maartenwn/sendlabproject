@@ -6,8 +6,6 @@ var _crypto = _interopRequireDefault(require("crypto"));
 
 var _express = _interopRequireDefault(require("express"));
 
-var _users = require("../shadow/users.js");
-
 var _jwt = require("../shadow/jwt.js");
 
 var jwt = _interopRequireWildcard(require("jsonwebtoken"));
@@ -16,6 +14,17 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//import { users } from '../shadow/users.js';
+var users = [{
+  userName: "root",
+  id: "b5bb20650eece726645891c81b9e9618",
+  role: "admin",
+  passwordHashed: "c6f038f9265cd8d9ecb841948c7086da3e716b2c5e95a1e9a1a8d20d63ff09627913cc88a7d479a8fde261de6ee650702dfa5c669d7583a3c9f7d09457f07a80",
+  salt: "492330363fbed184b7f574e84d283f4b3507d7a8a3d7e2c9635d08529c6c3716346f3eb5b9397ec03596ffa043c18fb4ec7e1ee53cfed9fa9e994bb1970b326d",
+  twoWayAuthSeed: "07414149916e647534c77133e4369496",
+  //base32  A5AUCSMRNZSHKNGHOEZ6INUUSY,
+  refresh_token: null
+}];
 const app = (0, _express.default)();
 const port = 8080;
 app.use(_bodyParser.default.json());
@@ -61,15 +70,25 @@ function createTokens(id, role) {
 }
 
 app.post("/login", (request, response) => {
-  console.log(request.body);
   const userName = request.body.userName;
   const password = request.body.password;
-  _users.users = (_users.users.map(user => {
+  const timeCode = Math.trunc(Date.now() / 30000).toString(16).padStart(16, '0');
+  const hotp = request.body.hotp;
+  users = users.map(user => {
     if (emailCompair(request.body.userName, userName)) {
       if (hash(password, user.salt).hash === user.passwordHashed) {
-        const tokens = createTokens(user.id, user.role);
-        user.refresh_token = tokens.refresh_token;
-        response.send(tokens);
+        const HMAC = _crypto.default.createHmac('sha1', new Buffer(user.twoWayAuthSeed, "hex")).update(new Buffer(timeCode, "hex")).digest();
+
+        const HOTP = truncate(HMAC).toString().padStart(6, "0");
+
+        if (hotp === HOTP) {
+          const tokens = createTokens(user.id, user.role);
+          user.refresh_token = tokens.refresh_token;
+          response.send(tokens);
+          return user;
+        }
+
+        response.status(500).send("nope");
         return user;
       }
 
@@ -79,16 +98,14 @@ app.post("/login", (request, response) => {
 
     response.status(500).send("nope");
     return user;
-  }), function () {
-    throw new Error('"' + "users" + '" is read-only.');
-  }());
+  });
   response.status(500).send("nope");
   return user;
 });
 app.post("/refresh", (request, response) => {
   const refreshToken = request.body.refresh_token;
   const userName = request.body.userName;
-  _users.users = (_users.users.map(user => {
+  users = users.map(user => {
     if (emailCompair(request.body.userName, userName)) {
       if (user.refresh_token === refreshToken) {
         const tokens = createTokens(user.id, user.role);
@@ -103,9 +120,7 @@ app.post("/refresh", (request, response) => {
 
     response.status(500).send("nope");
     return user;
-  }), function () {
-    throw new Error('"' + "users" + '" is read-only.');
-  }());
+  });
   response.status(500).send("nope");
   return user;
 });
@@ -114,4 +129,10 @@ function emailCompair(email1, email2) {
   const e1 = email1.trim();
   const e2 = email2.trim();
   return e1.toLocaleLowerCase() === e2.toLocaleLowerCase();
+}
+
+function truncate(hmac) {
+  let offset = hmac[19] & 0xf;
+  const truncatedHash = (hmac[offset] & 0x7f) << 24 | (hmac[offset + 1] & 0xff) << 16 | (hmac[offset + 2] & 0xff) << 8 | hmac[offset + 3] & 0xff;
+  return truncatedHash % Math.pow(10, 6);
 }
