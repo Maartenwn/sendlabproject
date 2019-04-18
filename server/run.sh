@@ -1,1 +1,1 @@
- docker run -it --rm sendlab/ubuntu
+ docker run -it --rm --name sendlab-ubuntu sendlab/ubuntu
