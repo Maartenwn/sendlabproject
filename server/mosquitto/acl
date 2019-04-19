@@ -1,0 +1,47 @@
+user zonneboot
+topic write data/zonneboot
+topic read events/+/zonneboot
+topic write LWT
+
+user warmtepomp
+topic write data/warmtepomp
+topic read events/+/warmtepomp
+topic write LWT
+
+user lotus
+topic write data/lotus
+topic read events/+/lotus
+topic write LWT
+
+user zonnepanelen
+topic write data/zonnepanelen
+topic read events/+/zonnepanelen
+topic write LWT
+
+user test_device
+topic write data/test
+topic read events/+/test
+topic write LWT
+
+#This user has been revoked acces in crl as a test
+user test_device_2
+topic write data/test2
+topic read events/+/test2
+topic write LWT
+
+user database-link
+topic read data/#
+
+user eventgeneratorhandler
+topic read data/#
+topic write events/#
+topic read LWT
+
+user eventlistener
+topic read events/#
+
+user root
+topic readwrite data/#
+topic readwrite events/#
+topic readwrite LWT
+topic read $SYS/#
