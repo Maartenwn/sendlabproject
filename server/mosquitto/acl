@@ -19,14 +19,7 @@ topic read events/+/zonnepanelen
 topic write LWT
 
 user test_device
-topic write data/test
-topic read events/+/test
-topic write LWT
-
-#This user has been revoked acces in crl as a test
-user test_device_2
-topic write data/test2
-topic read events/+/test2
+topic write data/test_device
 topic write LWT
 
 user database-link
