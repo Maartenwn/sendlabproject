@@ -57,7 +57,47 @@ const simulateLotus = async () => {
   console.log(mqttMessage);
 };
 
+const simulateBuffer = async () => {
+  let mqttMessage = {
+    "version-api": '1.0',
+    timestamp: (0, _moment.default)().toISOString(),
+    identifier: "test_device-001",
+    buffer: "testData1,testData2,testData3",
+    data: {
+      testData1: [{
+        testData1: Math.random() * 100,
+        timestamp: (0, _moment.default)().toISOString()
+      }, {
+        testData1: Math.random() * 100,
+        timestamp: (0, _moment.default)().toISOString()
+      }],
+      testData2: [{
+        testData2: Math.random().toString(36).substring(7),
+        timestamp: (0, _moment.default)().toISOString()
+      }, {
+        testData2: Math.random().toString(36).substring(7),
+        timestamp: (0, _moment.default)().toISOString()
+      }],
+      testData3: [{
+        testData3: true,
+        timestamp: (0, _moment.default)().toISOString()
+      }, {
+        testData3: false,
+        timestamp: (0, _moment.default)().toISOString()
+      }]
+    },
+    sensors: [{
+      "test_sensor_1": "true"
+    }, {
+      "test_sensor_2": "true"
+    }]
+  };
+  mqttClient.publish('data/test_device', JSON.stringify(mqttMessage));
+  console.log(JSON.stringify(mqttMessage));
+};
+
 mqttClient.on('connect', () => {
   console.log('Connected to mqtt!');
 });
 setInterval(simulateLotus, 10000);
+setInterval(simulateBuffer, 10000);
