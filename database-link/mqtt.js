@@ -24,7 +24,7 @@ client.on('error', function (err) {
 
 client.on('connect',() =>{
     console.log("Connected to mqtt");
-
+    
     client.subscribe(dataTopic, (err) =>{
         if(!err){
             console.log("Connected to topic"+ dataTopic);

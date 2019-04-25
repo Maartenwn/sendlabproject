@@ -6,7 +6,7 @@
   "author": "Lars Moesman & Rick Verstraten",
   "license": "MIT",
   "scripts": {
-    "build": "mkdir -p build && babel src -d build && cp package.json yarn.lock build/ && yarn --cwd build install --modules-folder build/node_modules --production",
+    "build": "babel src -d build && cp package.json yarn.lock build/ && yarn --cwd build install --modules-folder build/node_modules --production",
     "main": "yarn build && cd build && node index.js"
   },
   "devDependencies": {

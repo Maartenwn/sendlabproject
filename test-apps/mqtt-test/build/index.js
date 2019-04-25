@@ -62,7 +62,7 @@ const simulateBuffer = async () => {
     "version-api": '1.0',
     timestamp: (0, _moment.default)().toISOString(),
     identifier: "test_device-001",
-    buffer: "testData1,testData2,testData3",
+    buffer: ["testData1", "testData2", "testData3"],
     data: {
       testData1: [{
         testData1: Math.random() * 100,
