@@ -1,7 +1,7 @@
 version: '3'
 services:
   mqtt:
-    build: ./server
+    build: ./mqtt
     image: sendlab-mqtt/ubuntu
     container_name: sendlab-mqtt-ubuntu
     ports:
