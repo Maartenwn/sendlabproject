@@ -1,14 +1,11 @@
-import  mqtt from 'mqtt';
-import moment from 'moment';
-import * as fs from 'fs';
-import * as path from 'path'
+const mqtt = require('mqtt');
+const moment = require('moment');
+const fs = require('fs');
+const path = require('path');
 
-// const brokerUrl = 'mqtts://127.0.0.1';
-const certPath1 = '../../../server/mosquitto/certs/test_device';
-const certPath2 = '../../../server/mosquitto/ca_certificates';
-var KEY = fs.readFileSync(path.join(certPath1, '/client.key'))
-var CERT = fs.readFileSync(path.join(certPath1, '/client.crt'))
-var TRUSTED_CA_LIST = fs.readFileSync(path.join(certPath2, '/ca.crt'))
+var KEY = fs.readFileSync('certs/client.key')
+var CERT = fs.readFileSync('certs/client.crt')
+var TRUSTED_CA_LIST = fs.readFileSync('certs/ca.crt')
 
 const brokerOptions = {
   port: 8883,
@@ -48,7 +45,7 @@ const simulateLotus = async () => {
     ]
   }
   mqttClient.publish('data/test_device',JSON.stringify(mqttMessage));
-  console.log(mqttMessage);
+  //console.log(mqttMessage);
 }
 
 const simulateBuffer = async () => {
@@ -99,7 +96,7 @@ const simulateBuffer = async () => {
     ]
   }
   mqttClient.publish('data/test_device',JSON.stringify(mqttMessage));
-  console.log(JSON.stringify(mqttMessage));
+  //console.log(JSON.stringify(mqttMessage));
 }
 mqttClient.on('connect'	, () => {
   console.log('Connected to mqtt!');
