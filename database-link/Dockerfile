@@ -5,5 +5,4 @@ RUN apt-get install nano nodejs npm -y
 
 ADD app	/root/app
 
-
-RUN cd /root/app && node app.js
+RUN cd /root/app && npm install
