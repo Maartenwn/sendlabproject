@@ -1,0 +1,18 @@
+version: '3'
+services:
+  mqtt:
+    build: ./server
+    image: sendlab-mqtt/ubuntu
+    container_name: sendlab-mqtt-ubuntu
+    ports:
+     - "8883:8883"
+    command: /bin/bash
+    tty: true
+    stdin_open: true
+  database-link:
+    build: ./database-link
+    image: sendlab-db-link/ubuntu
+    container_name: sendlab-db-link-ubuntu
+    command: cd /root/app && node app.js
+    tty: true
+    stdin_open: true
