@@ -1,6 +1,7 @@
 import bodyParser from "body-parser";
 import crypto from "crypto";
 import express from "express";
+import * as moment from 'moment';
 
 import { private_key } from '../shadow/jwt.js';
 import * as jwt from 'jsonwebtoken';
@@ -11,7 +12,10 @@ var user = {
     role: "admin",
     passwordHashed: "6f9d132c4e31758c52fe8d4a53024b730f437023bfbeb44f4106b2e386de8431abf21cb9f9be7dea86bbf7b54968a02dc31b2c194a5f705748af52d969678c46",
     salt: "aa74a24d8dca1d927f9eafd9bb237ba5cc4f2b1a28eceb21f8b5657a71bd8d5c5e612c35aec15011f5b5dfca031cab2b563711dad243bb4dc28eceb95e067f27d773378657feaca25f8606c131b5a330b517292801b4ba68ac571c8182149e82b63179d456ad2b10eb062e96b9edc3ae774316fdd3375162e5cdb9c8254b47b9",
-    refresh_token: null
+    sessions: [{
+        refresh_token: null,
+        moment: null,
+    }]
 }
 
 
