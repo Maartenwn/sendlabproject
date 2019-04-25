@@ -9,10 +9,3 @@ services:
     command: /bin/bash
     tty: true
     stdin_open: true
-  database-link:
-    build: ./database-link
-    image: sendlab-db-link/ubuntu
-    container_name: sendlab-db-link-ubuntu
-    command: cd /root/app && node app.js
-    tty: true
-    stdin_open: true
