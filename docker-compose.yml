@@ -6,6 +6,5 @@ services:
     container_name: sendlab-mqtt-ubuntu
     ports:
      - "8883:8883"
-    command: /bin/bash
     tty: true
     stdin_open: true
