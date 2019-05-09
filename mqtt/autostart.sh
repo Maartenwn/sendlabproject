@@ -1,3 +1,3 @@
 service mosquitto restart
-chmod 777 /var/log/mosquitto
+chown mosquitto:mosquitto /var/log/mosquitto
 /bin/bash
