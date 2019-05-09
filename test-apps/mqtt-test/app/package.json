@@ -1,0 +1,25 @@
+{
+  "name": "mqtt-test",
+  "version": "1.0.0",
+  "description": "app to receive mqtt data en put that data in the database",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Maartenwn/sendlabproject.git"
+  },
+  "author": "API-team and Database-team",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Maartenwn/sendlabproject/issues"
+  },
+  "homepage": "https://github.com/Maartenwn/sendlabproject#readme",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "moment": "^2.24.0",
+    "mqtt": "^2.18.8",
+    "path": "^0.12.7"
+  }
+}

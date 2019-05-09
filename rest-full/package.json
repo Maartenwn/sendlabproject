@@ -1,0 +1,23 @@
+{
+  "name": "rest-full",
+  "version": "1.0.0",
+  "description": "rest-full aplication for sendlab",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Maartenwn/sendlabproject.git"
+  },
+  "author": "API team",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Maartenwn/sendlabproject/issues"
+  },
+  "homepage": "https://github.com/Maartenwn/sendlabproject#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4"
+  }
+}

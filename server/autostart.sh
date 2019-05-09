@@ -1,1 +1,0 @@
-service mosquitto restart
