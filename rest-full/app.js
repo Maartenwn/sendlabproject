@@ -1,31 +1,47 @@
-var express = require('express');
-var parser = require('body-parser');
-var router = require('./router.js');
+const express = require('express');
+const parser = require('body-parser');
+const jwt = require('jsonwebtoken');
+const key = require('./jwt.js');
+const router = require('./router.js');
 
-console.log("Starting...");
+console.log('Starting...');
 
 let isTesting = true;
 
 var app = express();
 app.use(parser.json());
-app.use(parser.urlencoded({extended: true}));
+app.use(parser.urlencoded({ extended: true }));
 
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
-  });
+});
 
-app.all('*',(req,res,next)=>{
+app.all('*', (req, res, next) => {
+    if (req.headers.authorization == undefined) {
+        res.status(401).send('Unauthorized');
+        return;
+    }
+    
     let typeKey = req.headers.authorization.split(' ')[0];
     let access_token = req.headers.authorization.split(' ')[1];
 
-    if(typeKey == "bearer" && access_token == "test" | isTesting){
-        next();
-    } else res.status(401).send("Unauthorized")
-})
-app.use('/IoT/api',router);
+    const jwtOptions = { algorithm: 'HS512' };
+    const valid = jwt.verify(access_token, key.trim(), jwtOptions, (error, result) => {
+        if (error) {
+            console.log(error);
+            return false;
+        }
+        else return true;
+    });
 
-app.listen(23450,function(){
-    console.log("server started");
+    if (typeKey == 'bearer' && valid | isTesting) {
+        next();
+    } else res.status(401).send('Unauthorized')
+});
+app.use('/IoT/api', router);
+
+app.listen(23450, function () {
+    console.log('server started');
 });
