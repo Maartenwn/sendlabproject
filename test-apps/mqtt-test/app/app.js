@@ -14,7 +14,12 @@ const brokerOptions = {
   cert: CERT,
   rejectUnauthorized: true,
   ca: TRUSTED_CA_LIST,
-  protocol: 'mqtts'
+  protocol: 'mqtts',
+  will:{
+	  topic: "LWT",
+	  payload: "{identifier: 'test_device-001'}",
+	  qos: 2
+  }
 }
 const testTopic = 'data/test_device';
 
