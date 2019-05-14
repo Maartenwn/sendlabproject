@@ -19,7 +19,7 @@ router.get('/device/:deviceID/data/:mode',(req,res) => {
                 end : end,
                 interval: interval,
             })
-        }else res.status(200).send("")
+        }else res.status(417).send("Niet voldaan aan verwachting")
     }else res.status(404).send();
 })  
 
