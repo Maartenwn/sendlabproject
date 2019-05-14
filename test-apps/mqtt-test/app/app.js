@@ -3,9 +3,9 @@ const moment = require('moment');
 const fs = require('fs');
 const path = require('path');
 
-var KEY = fs.readFileSync('./certs/client.key')
-var CERT = fs.readFileSync('./certs/client.crt')
-var TRUSTED_CA_LIST = fs.readFileSync('./certs/ca.crt')
+var KEY = fs.readFileSync('/root/test-apps/mqtt-test/app/certs/client.key')
+var CERT = fs.readFileSync('/root/test-apps/mqtt-test/app/certs/client.crt')
+var TRUSTED_CA_LIST = fs.readFileSync('/root/test-apps/mqtt-test/app/certs/ca.crt')
 
 const brokerOptions = {
   port: 8883,
