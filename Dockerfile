@@ -9,6 +9,7 @@ ADD rest-full /root/rest-full
 ADD oauth /root/oauth
 ADD database-link /root/database-link
 ADD event-generator-handler /root/event-generator-handler
+ADD test-apps /root/test-apps
 
 ADD node/autostart.sh /
 RUN chmod 755 autostart.sh
