@@ -1,5 +1,5 @@
 {
-    "name": "24auth",
+    "name": "oauth",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
@@ -18,14 +18,9 @@
         "uuid": "^3.3.2"
     },
     "devDependencies": {
-        "@babel/cli": "^7.2.3",
-        "@babel/core": "^7.2.2",
-        "@babel/node": "^7.2.2",
-        "@babel/preset-env": "^7.3.1"
     },
     "scripts": {
-        "build": "babel src -d build && cp package.json yarn.lock build/ && yarn --cwd build install --modules-folder build/node_modules --production",
-        "main": "yarn build && cd build && node index.js"
+        "main": "node index.js"
     },
     "author": "Rick Verstraten",
     "license": "ISC"
