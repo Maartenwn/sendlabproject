@@ -1,9 +1,9 @@
 const mqtt = require('mqtt');
 const fs = require('fs');
 
-var KEY = fs.readFileSync("/root/test-appps/mqtt-test/app/certs/client.key");
-var CRT = fs.readFileSync("/root/test-appps/mqtt-test/app/certs/client.crt");
-var CA  = fs.readFileSync("/root/test-appps/mqtt-test/app/certs/ca.crt");
+var KEY = fs.readFileSync("/root/database-link/app/certs/client.key");
+var CRT = fs.readFileSync("/root/database-link/app/certs/client.crt");
+var CA  = fs.readFileSync("/root/database-link/app/certs/ca.crt");
 
 const brokerOptions = {
     port: 8883,
