@@ -1,1 +1,0 @@
- docker kill sendlab-ubuntu

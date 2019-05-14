@@ -7,6 +7,16 @@ services:
     ports:
      - "8883:8883"
     volumes:
-     - ./logs/mosquitto:/var/log/mosquitto:rw
+     - /var/log/mosquitto:/var/log/mosquitto:rw
+    tty: true
+    stdin_open: true
+  node:
+    build: ./
+    image: sendlab-node/ubuntu
+    container_name: sendlab-node-ubuntu
+    ports:
+     - "23450:23450"
+    volumes:
+     - /var/log/pm2:/root/.pm2/logs:rw
     tty: true
     stdin_open: true
