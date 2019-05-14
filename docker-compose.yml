@@ -16,6 +16,7 @@ services:
     container_name: sendlab-node-ubuntu
     ports:
      - "23450:23450"
+     - "34219:34219"
     volumes:
      - /var/log/pm2:/root/.pm2/logs:rw
     tty: true
