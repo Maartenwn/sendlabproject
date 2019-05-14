@@ -24,7 +24,7 @@ var user = {
   sessions: new Map()
 };
 var app = express();
-var port = 8080;
+var port = 34219;
 var RefreshTokenLifeTimeMs = 7 * 24 * 60 * 60 * 1000; //const RefreshTokenLifeTimeMs = 60000;
 
 app.use(bodyParser.json());
