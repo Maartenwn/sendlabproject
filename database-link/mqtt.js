@@ -1,13 +1,14 @@
 const mqtt = require('mqtt');
 const fs = require('fs');
+const config = require('../node/config.js');
 
-var KEY = fs.readFileSync("/root/database-link/app/certs/client.key");
-var CRT = fs.readFileSync("/root/database-link/app/certs/client.crt");
-var CA  = fs.readFileSync("/root/database-link/app/certs/ca.crt");
+var KEY = fs.readFileSync("/root/database-link/certs/client.key");
+var CRT = fs.readFileSync("/root/database-link/certs/client.crt");
+var CA  = fs.readFileSync("/root/database-link/certs/ca.crt");
 
 const brokerOptions = {
     port: 8883,
-    host: '192.168.1.30',
+    host: config.host,
     key: KEY,
     cert: CRT,
     rejectUnauthorized: true,

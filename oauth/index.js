@@ -8,7 +8,7 @@ var express = require("express");
 
 var moment = require('moment');
 
-var _require = require('../shadow/jwt.js'),
+var _require = require('./shadow/jwt.js'),
     private_key = _require.private_key;
 
 var jwt = require('jsonwebtoken');
