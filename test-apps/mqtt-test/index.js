@@ -2,14 +2,14 @@ const mqtt = require('mqtt');
 const moment = require('moment');
 const fs = require('fs');
 const path = require('path');
-
-var KEY = fs.readFileSync('/root/test-apps/mqtt-test/app/certs/client.key')
-var CERT = fs.readFileSync('/root/test-apps/mqtt-test/app/certs/client.crt')
-var TRUSTED_CA_LIST = fs.readFileSync('/root/test-apps/mqtt-test/app/certs/ca.crt')
+const config = require('../../node/config.js');
+var KEY = fs.readFileSync('/root/test-apps/mqtt-test/certs/client.key')
+var CERT = fs.readFileSync('/root/test-apps/mqtt-test/certs/client.crt')
+var TRUSTED_CA_LIST = fs.readFileSync('/root/test-apps/mqtt-test/certs/ca.crt')
 
 const brokerOptions = {
   port: 8883,
-  host: '192.168.1.30',
+  host: config.host,
   key: KEY,
   cert: CERT,
   rejectUnauthorized: true,
