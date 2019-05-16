@@ -1,4 +1,5 @@
 const connectionManager = require('./connection-manager');
+const sensorManager = require('./sensor-manager');
 const moment = require('moment');
 
 
@@ -19,6 +20,9 @@ const sendEvents = async () => {
 const onReceiveData = function(data,isBuffer){
     if(data.identifier){
         connectionManager.addConnectionIfNotExist(data.identifier);
+        if (data.sensors) {
+            sensorManager.checkSensors(data);
+        }
     }
 }
 
@@ -34,7 +38,7 @@ const addEventToSend = function(eventData,identifier){
     }
     eventsToSend[identifier].events.push(eventData);
 }
-connectionManager.initConnectionManger(addEventToSend);
+
 
 const onReceiveLastWill = function(data){
     if(data.identifier){
@@ -42,7 +46,8 @@ const onReceiveLastWill = function(data){
     }
 }
 
-
+connectionManager.initConnectionManger(addEventToSend);
+sensorManager.initSensorManager(addEventToSend);
 
 module.exports = {
     onReceiveData,

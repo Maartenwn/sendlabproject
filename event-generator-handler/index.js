@@ -3,13 +3,9 @@ const fs = require('fs');
 const config = require('../node/config.js');
 const eventManager = require('./event-manager');
 
-// var KEY = fs.readFileSync("/root/event-generator-handler/certs/client.key");
-// var CRT = fs.readFileSync("/root/event-generator-handler/certs/client.crt");
-// var CA  = fs.readFileSync("/root/event-generator-handler/certs/ca.crt");
-
-var KEY = fs.readFileSync("D:/TI/3.4/r&d/sendlabproject/event-generator-handler/certs/client.key");
-var CRT = fs.readFileSync("D:/TI/3.4/r&d/sendlabproject/event-generator-handler/certs/client.crt");
-var CA  = fs.readFileSync("D:/TI/3.4/r&d/sendlabproject/event-generator-handler/certs/ca.crt");
+var KEY = fs.readFileSync("./certs/client.key");
+var CRT = fs.readFileSync("./certs/client.crt");
+var CA  = fs.readFileSync("./certs/ca.crt");
 
 const brokerOptions = {
     port: 8883,
