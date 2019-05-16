@@ -1,7 +1,7 @@
 const connectionManager = require('./connection-manager');
+const metadataManger = require('./metadata-manager');
 const sensorManager = require('./sensor-manager');
 const moment = require('moment');
-
 
 var client;
 var eventsToSend = {};
@@ -20,6 +20,7 @@ const sendEvents = async () => {
 const onReceiveData = function(data,isBuffer){
     if(data.identifier){
         connectionManager.addConnectionIfNotExist(data.identifier);
+        metadataManger.checkForMetadata(data,data.identifier);
         if (data.sensors) {
             sensorManager.checkSensors(data);
         }
@@ -40,6 +41,7 @@ const addEventToSend = function(eventData,identifier){
 }
 
 
+
 const onReceiveLastWill = function(data){
     if(data.identifier){
         connectionManager.removeConnection(data.identifier);
@@ -48,6 +50,7 @@ const onReceiveLastWill = function(data){
 
 connectionManager.initConnectionManger(addEventToSend);
 sensorManager.initSensorManager(addEventToSend);
+metadataManger.initMetadataManager(addEventToSend);
 
 module.exports = {
     onReceiveData,
