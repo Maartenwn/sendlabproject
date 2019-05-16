@@ -15,17 +15,18 @@ const checkSensors = ({ identifier, sensors }) => {
 
   sensors.forEach((item) => {
     const key = Object.keys(item)[0];
-    const value = item[key];
+    let value = item[key];
 
-    const valid = (typeof value == 'boolean') ? true : 'true';
-    const invalid = (typeof value == 'boolean') ? false : 'false';
-
-    if (deviceSensors[key] == invalid && value == valid) {
+    if(typeof value !== 'boolean') {
+      value = (value === 'true');
+    }
+  
+    if (deviceSensors[key] == false && value == true) {
       callback({
         type: "sensor-on",
         message: `${key} has turned on.`
       }, identifier);
-    } else if (deviceSensors[key] == valid && value == invalid) {
+    } else if (deviceSensors[key] == true && value == false) {
       callback({
         type: "sensor-off",
         message: `${key} has turned off.`
@@ -40,7 +41,10 @@ const updateData = (identifier, sensors) => {
   let newSensorObject = {};
   sensors.forEach((item) => {
     const key = Object.keys(item)[0];
-    const value = item[key];
+    let value = item[key];
+    if(typeof value !== 'boolean') {
+      value = (value === 'true');
+    }
     newSensorObject[key] = value
   });
   devices[identifier] = newSensorObject;
