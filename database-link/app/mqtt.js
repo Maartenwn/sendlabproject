@@ -7,7 +7,7 @@ var CA  = fs.readFileSync("/root/database-link/app/certs/ca.crt");
 
 const brokerOptions = {
     port: 8883,
-    host: '134.209.87.163',
+    host: '192.168.1.30',
     key: KEY,
     cert: CRT,
     rejectUnauthorized: true,

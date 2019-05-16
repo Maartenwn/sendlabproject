@@ -9,7 +9,7 @@ var TRUSTED_CA_LIST = fs.readFileSync('/root/test-apps/mqtt-test/app/certs/ca.cr
 
 const brokerOptions = {
   port: 8883,
-  host: '134.209.87.163',
+  host: '192.168.1.30',
   key: KEY,
   cert: CERT,
   rejectUnauthorized: true,

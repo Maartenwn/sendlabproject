@@ -8,4 +8,4 @@ router.post('/:deviceId/command',(req,res) => {
         body: req.body
     });
 })  
-module.exports = router;
+module.exports = router;    
