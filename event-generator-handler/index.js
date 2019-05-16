@@ -11,7 +11,7 @@ var CA  = fs.readFileSync("./certs/ca.crt");
 
 const brokerOptions = {
     port: 8883,
-    host: "134.209.87.163",//config.host,
+    host: config.host,
     key: KEY,
     cert: CRT,
     rejectUnauthorized: true,
