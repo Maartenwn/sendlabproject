@@ -16,7 +16,10 @@ put mqtt/mosquitto/mosquitto.conf mqtt/mosquitto/
 put -r mqtt/mosquitto/certs/crl mqtt/mosquitto/certs/
 put mqtt/mosquitto/certs/addServerCertBasedOnIP.sh mqtt/mosquitto/certs/
 
-put -r node
+mkdir node
+put node/autostart.sh node/
+put node/config-test.js node/config.js
+
 put -r oauth 
 put -r rest-full
 put -r test-apps
