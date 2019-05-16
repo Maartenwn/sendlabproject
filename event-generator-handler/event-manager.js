@@ -1,6 +1,6 @@
 const connectionManager = require('./connection-manager');
+const metadataManger = require('./metadata-manager');
 const moment = require('moment');
-
 
 var client;
 var eventsToSend = {};
@@ -19,6 +19,7 @@ const sendEvents = async () => {
 const onReceiveData = function(data,isBuffer){
     if(data.identifier){
         connectionManager.addConnectionIfNotExist(data.identifier);
+        metadataManger.checkForMetadata(data,data.identifier);
     }
 }
 
@@ -35,6 +36,7 @@ const addEventToSend = function(eventData,identifier){
     eventsToSend[identifier].events.push(eventData);
 }
 connectionManager.initConnectionManger(addEventToSend);
+metadataManger.initMetadataManager(addEventToSend);
 
 const onReceiveLastWill = function(data){
     if(data.identifier){
