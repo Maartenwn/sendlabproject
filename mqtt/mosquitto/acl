@@ -1,21 +1,21 @@
 user zonneboot
 topic write data/zonneboot
-topic read events/+/zonneboot
+topic read events/zonneboot
 topic write LWT
 
 user warmtepomp
 topic write data/warmtepomp
-topic read events/+/warmtepomp
+topic read events/warmtepomp
 topic write LWT
 
 user lotus
 topic write data/lotus
-topic read events/+/lotus
+topic read events/lotus
 topic write LWT
 
 user zonnepanelen
 topic write data/zonnepanelen
-topic read events/+/zonnepanelen
+topic read events/zonnepanelen
 topic write LWT
 
 user test_device
