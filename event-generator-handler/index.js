@@ -2,6 +2,8 @@ const mqtt = require('mqtt');
 const fs = require('fs');
 const config = require('../node/config.js');
 const eventManager = require('./event-manager');
+const moment = require('moment');
+
 
 var KEY = fs.readFileSync("./certs/client.key");
 var CRT = fs.readFileSync("./certs/client.crt");
@@ -54,6 +56,18 @@ client.on('message', function (topic, message) {
             }
         }
     } catch (error) {
-        
+        let id = topic.split('/')[1]
+        const event = {
+            "version-events" : 1.0,
+            timestamp: moment().toISOString(),
+            id,
+            events: [
+                {
+                    "type" : "undefined-error",
+                    "message" : "Something went wrong"
+                }
+            ] 
+        };
+        client.publish("events/" + id, JSON.stringify(event));
     }
 })
