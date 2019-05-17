@@ -14,7 +14,6 @@ const addConnectionIfNotExist = function(identifier) {
         devicesConnected[identifier] = moment().toISOString();
     }else if(!devicesConnected[identifier] && devicesDisconnected[identifier]){
         devicesConnected[identifier] = moment().toISOString();
-        console.log("test");
         callback({
             type: "connection-reastablised",
             message: `${identifier} has reastablised connection, ${identifier}'s previous call was at ${devicesDisconnected[identifier]}`

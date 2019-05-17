@@ -12,7 +12,8 @@ const initEventManager = function(mqttclient){
 }
 const sendEvents = async () => {
     Object.keys(eventsToSend).forEach( (key) =>{
-        client.publish("events/" + key.split('-')[0],JSON.stringify(eventsToSend[key]))
+        client.publish("events/" + key.split('-')[0],JSON.stringify(eventsToSend[key]));
+        console.log("events sen: " + JSON.stringify(eventsToSend[key]));
     })
     eventsToSend = {};
 }

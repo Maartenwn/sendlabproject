@@ -1,5 +1,4 @@
-const host = '192.168.1.3';
-
+const host = '134.209.87.163'
 module.exports = {
   host
 }
