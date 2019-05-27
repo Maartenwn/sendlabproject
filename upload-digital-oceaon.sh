@@ -18,7 +18,7 @@ put mqtt/mosquitto/certs/addServerCertBasedOnIP.sh mqtt/mosquitto/certs/
 
 mkdir node
 put node/autostart.sh node/
-put node/config.js node/config.js
+put node/config-digitalocean.js node/config.js
 
 put -r oauth 
 put -r rest-full

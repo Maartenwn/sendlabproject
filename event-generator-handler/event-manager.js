@@ -8,12 +8,12 @@ var eventsToSend = {};
 
 const initEventManager = function(mqttclient){
     client = mqttclient
-    setInterval(sendEvents, 2000);
+    setInterval(sendEvents, 1000);
 }
 const sendEvents = async () => {
     Object.keys(eventsToSend).forEach( (key) =>{
         client.publish("events/" + key.split('-')[0],JSON.stringify(eventsToSend[key]));
-        console.log("events sen: " + JSON.stringify(eventsToSend[key]));
+        console.log("events send: " + JSON.stringify(eventsToSend[key]));
     })
     eventsToSend = {};
 }
@@ -31,7 +31,7 @@ const onReceiveData = function(data,isBuffer){
 const addEventToSend = function(eventData,identifier){
     if(eventsToSend[identifier] === undefined){
         const event = {
-            "version-events" : 1.0,
+            "version-events" : "1.0",
             timestamp: moment().toISOString(),
             identifier,
             events: []
