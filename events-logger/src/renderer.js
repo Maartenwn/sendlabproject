@@ -1,104 +1,126 @@
 // This file is required by the index.html file and will
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
-const { ipcRenderer } = require('electron')
-const mqtt = require('mqtt');
-const moment = require('moment');
-const fs = require('fs');
-const path = require('path');
-var KEY = fs.readFileSync('./certs/client.key')
-var CERT = fs.readFileSync('./certs/client.crt')
-var TRUSTED_CA_LIST = fs.readFileSync('./certs/ca.crt')
+window.$ = window.jquery = require('./../node_modules/jquery');
+window.dt = require('./../node_modules/datatables.net-bs4')();
+require('./../node_modules/datatables.net/js/jquery.dataTables.js')
+require('./../node_modules/datatables.net-bs4/js/dataTables.bootstrap4.js')
 
-const brokerOptions = {
-  port: 8883,
-  host: '134.209.87.163',
-  key: KEY,
-  cert: CERT,
-  rejectUnauthorized: true,
-  ca: TRUSTED_CA_LIST,
-  protocol: 'mqtts',
-  will:{
-	  topic: "LWT",
-	  payload: "{identifier: 'test_device-001'}",
-	  qos: 2
-  }
-}
-const mqttClient = mqtt.connect(brokerOptions);
 
-mqttClient.on('connect', function () {
-    mqttClient.subscribe('events/#', function (err) {
-      console.log("Subscribed to events/#");
+$(document).ready( function () {
+    var table = $('#table_id').DataTable({
+        "pageLength": 20,
+        "lengthChange" : false,
+        "sDom":' <"search"f><"top"l>rt<"bottom"ip><"clear">',
+        "language": {
+            "search": "Filter records: "
+        },
+        "paging": true,
+        "order": [[ 1, "dec" ]],
+        "columns": [
+            { "width": "5%" },
+            { "width": "13%" },
+            { "width": "13%" },
+            { "width": "13%" },
+            { "width": "56%" }
+        ],
+        columnDefs: [ {
+                targets: [ 0 ],
+                orderData: [ 0, 1 ],
+                orderSequence : ["desc","asc"]
+            },
+            {
+                targets: [ 2 ],
+                orderData: [ 2, 1 ],
+                orderSequence : ["desc","asc"]
+            },
+            {
+                targets: [ 3 ],
+                orderData: [ 3, 1 ],
+                orderSequence : ["desc","asc"]
+
+            },{
+                targets: [ 4 ],
+                orderData: [ 4, 1 ],
+                orderSequence : ["desc","asc"]
+            }
+        ],
+        "scrollY":"790px",
+        "scrollCollapse": true
+    });
+
+    const mqtt = require('mqtt');
+    const moment = require('moment');
+    const fs = require('fs');
+    const path = require('path');
+    var KEY = fs.readFileSync(__dirname + '/certs/client.key')
+    var CERT = fs.readFileSync(__dirname + '/certs/client.crt')
+    var TRUSTED_CA_LIST = fs.readFileSync(__dirname + '/certs/ca.crt')
+    
+    const brokerOptions = {
+        port: 8883,
+        host: '134.209.87.163',
+        key: KEY,
+        cert: CERT,
+        rejectUnauthorized: true,
+        ca: TRUSTED_CA_LIST,
+        protocol: 'mqtts'
+    }
+    const mqttClient = mqtt.connect(brokerOptions);
+    mqttClient.on('connect', function () {
+        mqttClient.subscribe('events/#', function (err) {
+        console.log("Subscribed to events/#");
+        })
     })
-  })
 
-  mqttClient.on('message', function (topic, message) {
-    // message is Buffer
-    try {
-        var json = JSON.parse(message);
-        json.events.forEach(event => {
-            if(json["version-events"] && json.timestamp && json.identifier && event.message && event.type){   
-                const tr = document.createElement("tr");
-                let version = document.createElement("td");
-                version.classList.add("text-nowrap");
-                version.innerHTML= json["version-events"];
-                tr.appendChild(version)
+    mqttClient.on('message', function (topic, message) {
+        // message is Buffer
+        try {
+            var json = JSON.parse(message);
+            json.events.forEach(event => {
+                if(json["version-events"] && json.timestamp && json.identifier && event.message && event.type){
 
-                let timestamp = document.createElement("td");
-                timestamp.classList.add("text-nowrap");
-                timestamp.innerHTML= json.timestamp;
-                tr.appendChild(timestamp);
+                    var rowNode = table.row.add([json["version-events"],json.timestamp,json.identifier,event.type,event.message]).draw().node();
+                    
+                    switch(event.type){
+                        case "wrong-metadata": 
+                            $(rowNode).css('background','#db0502');
+                            $(rowNode).css('color','white');
+                            break;
+                        case "connection-reastablised":
+                            $(rowNode).css('background','darkgreen');
+                            $(rowNode).css('color','white');
+                            break;
+                        case "connection-lost":
+                            $(rowNode).css('background','orangered');
+                            $(rowNode).css('color','white');
+                            break
+                        case "sensor-on":
+                            $(rowNode).css('background','#34963b');
+                            $(rowNode).css('color','white');
+                            break
+                        case "sensor-off":
+                            $(rowNode).css('background','orange');
+                            $(rowNode).css('color','black');
+                            break
+                        case "new-device":
+                            $(rowNode).css('background','#1000ff');
+                            $(rowNode).css('color','white');
+                            break
+                        case "value-odd":
+                            $(rowNode).css('background','yellow');
+                            $(rowNode).css('color','black');
+                            break
+                        case "undefined-error":
+                            $(rowNode).css('background','#3d0101');
+                            $(rowNode).css('color','white');
+                            break
+                    }
 
-                let identifier = document.createElement("td");
-                identifier.classList.add("text-nowrap");
-                identifier.innerHTML= json.identifier;
-                tr.appendChild(identifier);
-
-                let type = document.createElement("td");
-                type.classList.add("text-nowrap");
-                type.innerHTML= event.type;
-                tr.appendChild(type);
-
-                switch(event.type){
-                    case "wrong-metadata": 
-                        tr.style.background = '#a21616';
-                        tr.style.color = "white";
-                        break;
-                    case "connection-reastablised":
-                        tr.style.background = '#3d7733'
-                        tr.style.color = 'white'
-                        break;
-                    case "connection-lost":
-                        tr.style.background = '#650087'
-                        tr.style.color = 'white'
-                        break
-                    case "sensor-on":
-                        tr.style.background = '#0a048c'
-                        tr.style.color = 'white'
-                        break
-                    case "sensor-off":
-                        tr.style.background = '#afa002'
-                        tr.style.color = 'white'
-                        break
-                    case "new-device":
-                        tr.style.background = '#011c11'
-                        tr.style.color = 'white'
-                        break
-                }
-
-                let message = document.createElement("td");
-                message.classList.add("break-all");
-                message.innerHTML= event.message;
-                tr.appendChild(message);
-
-                var list  = document.getElementById("table_row")
-                list.insertBefore(tr,list.childNodes[0])
-                while(list.childNodes.length > 1000){
-                    list.removeChild(list.childNodes[list.childNodes.length - 1]);
-                }
-            }else console.log(message.toString())
-        });
-      } catch (error) {
-        console.log(error.message);
-      }
-  })
+                }else console.error("Wrong error message: " + message.toString())
+            });
+        } catch (error) {
+            console.error(error.message);
+        }
+    })
+} );

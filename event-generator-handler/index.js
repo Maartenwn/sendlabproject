@@ -58,13 +58,13 @@ client.on('message', function (topic, message) {
     } catch (error) {
         let id = topic.split('/')[1]
         const event = {
-            "version-events" : 1.0,
+            "version-events" : "1.0",
             timestamp: moment().toISOString(),
-            id,
+            identifier:"Undefined error on events/" + id,
             events: [
                 {
                     "type" : "undefined-error",
-                    "message" : "Something went wrong"
+                    "message" : error.message
                 }
             ] 
         };

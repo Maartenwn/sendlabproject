@@ -17,7 +17,3 @@ body {
 .card_top_events {
   height: 100%;margin-top: 0%; width: 100%;
 }
-
-.event_table {overflow-y: auto; height: 950px;}
-.event_table th {position: sticky; top: 0; }
-th {background: white; border-color: white}
