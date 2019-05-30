@@ -38,14 +38,14 @@ const simulateLotus = async () => {
     data: {
 		testData1: number,
 		testData2: rString,
-		testData3: "true"		
+		testData3: true		
     },
     sensors:[
       {
-        "test_sensor_1": "true"
+        "test_sensor_1": true
       },			
       {
-        "test_sensor_2": "true"
+        "test_sensor_2": true
       }
     ]
   }
@@ -93,10 +93,10 @@ const simulateBuffer = async () => {
     },
     sensors:[
       {
-        "test_sensor_1": "true"
+        "test_sensor_1": true
       },			
       {
-        "test_sensor_2": "true"
+        "test_sensor_2": true
       }
     ]
   }
