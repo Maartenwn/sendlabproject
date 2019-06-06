@@ -12,17 +12,19 @@ const initOddValueManager = (callbackEvent)=>{
 var schemas = {}
 const checkSchema  = (schema,data,identifier,place) =>{
     var validate = schemas[schema];
-    var valid = validate(data);
-    if (!valid){
-        let errors = validate.errors;
+    if(validate){
+        var valid = validate(data);
+        if (!valid){
+            let errors = validate.errors;
 
-        errors.forEach(error => {
-            let keys = error.dataPath.split('.');
-            callback({
-                type: "value-odd",
-                message: identifier + " |"+ error.keyword +"| " + error.dataPath + " " + error.message + ", value = " + error['data']
-            },identifier);
-        });
+            errors.forEach(error => {
+                let keys = error.dataPath.split('.');
+                callback({
+                    type: "value-odd",
+                    message: identifier + " |"+ error.keyword +"| " + error.dataPath + " " + error.message + ", value = " + error['data']
+                },identifier);
+            });
+        }
     } 
 }
 
@@ -36,8 +38,7 @@ const checkForOddValue = (data,identifier,isBuffer) =>{
             keys.forEach(key => {
                 let schemeName = topId + "/" + key
                 if(!schemas[schemeName]){
-                    let schema = require("./schemas/" + schemeName + ".json");
-                    schemas[schemeName] = ajv.compile(schema);
+                    let schema = getschema("./schemas/" + schemeName + ".json",schemeName,identifier);
                 }
                 data.data[key].forEach(value => {
                     delete value.timestamp;
@@ -45,8 +46,7 @@ const checkForOddValue = (data,identifier,isBuffer) =>{
                 });
             });
         }else{
-            let schema = require("./schemas/" + topId + "/" + topId +  ".json");
-            schemas[topId] = ajv.compile(schema);
+            let schema = getschema("./schemas/" + topId + "/" + topId +  ".json",topId,identifier);
             checkSchema(topId,data.data,identifier,"");
         }
     } catch (error) {
@@ -62,6 +62,22 @@ const checkForOddValue = (data,identifier,isBuffer) =>{
     }
 }
 
+const getschema = (s,schemeName,identifier)=>{
+    try {
+         let schema = require(s);
+         schemas[schemeName] = ajv.compile(schema);
+    } catch (error){
+        if(!errorMessages.includes(error.message)){
+            errorMessages.push(error.message);
+            console.error(error.message);
+
+            callback({
+                type: "undefined-error",
+                message: "Odd-value-manager: " + error.message
+            },identifier);
+        }
+    }
+}
 module.exports = {
     initOddValueManager,
     checkForOddValue
