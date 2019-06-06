@@ -20,6 +20,11 @@ mkdir node
 put node/autostart.sh node/
 put node/config.js node/config.js
 
+mkdir mongodb
+put mongodb/autostart.sh mongodb/
+put mongodb/mongodb.conf mongodb/
+put mongodb/Dockerfile mongodb/
+
 put -r oauth 
 put -r rest-full
 put -r test-apps
