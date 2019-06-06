@@ -1,3 +1,3 @@
 service mosquitto restart
-chown mosquitto:mosquitto /var/log/mosquitto
+chown -R mosquitto:mosquitto /var/log/mosquitto
 /bin/bash
