@@ -22,6 +22,10 @@ user test_device
 topic write data/test_device
 topic write LWT
 
+user smartsensor
+topic readwrite smartsensor
+topic write data/smartsensor
+
 user database-link
 topic read data/#
 
