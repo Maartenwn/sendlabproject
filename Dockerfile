@@ -1,6 +1,6 @@
 FROM ubuntu:latest
 
-RUN apt-get update -qq && apt-get upgrade -y
+RUN apt-get update && apt-get upgrade -y
 RUN apt-get install nano curl -y
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 RUN apt-get install nodejs -y

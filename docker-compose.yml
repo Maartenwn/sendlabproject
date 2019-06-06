@@ -7,7 +7,7 @@ services:
     ports:
      - "8883:8883"
     volumes:
-     - ./var/log/mosquitto:/var/log/mosquitto:rw
+     - /var/log/mosquitto:/var/log/mosquitto:rw
     tty: true
     stdin_open: true
   node:
@@ -18,7 +18,7 @@ services:
      - "23450:23450"
      - "34219:34219"
     volumes:
-     - ./var/log/pm2:/root/.pm2/logs:rw
+     - /var/log/pm2:/root/.pm2/logs:rw
     tty: true
     stdin_open: true
   mongo:
@@ -26,7 +26,7 @@ services:
     image: sendlab-mongo/ubuntu
     container_name: sendlab-mongo-ubuntu
     volumes:
-     - ./var/log/mongodb:/var/log/mongodb:rw
-     - ./data:/data
+     - /var/log/mongodb:/var/log/mongodb:rw
+     - /data:/data
     tty: true
     stdin_open: true
