@@ -1,6 +1,7 @@
 const mqtt = require('mqtt');
 const fs = require('fs');
 const config = require('../node/config.js');
+const database = require("./../database/api");
 
 var KEY = fs.readFileSync("./certs/client.key");
 var CRT = fs.readFileSync("./certs/client.crt");
@@ -44,9 +45,9 @@ client.on('message', function (topic, message) {
 			bufferdata.forEach(buffer => {
 				var idValue = buffer[0]; //key value of attribute
 				buffer[1].forEach(e => { //loop through array
-					var timestamp = e.timestamp //timestamp
-					delete e.timestamp; //remove timestamp from the data
 					console.log("Identiefier: " + object.identifier + "/" + idValue+  " Timestamp: " + timestamp + '\n' + "data: " + JSON.stringify(e));
+					data.identifier = object.identifier;
+					database.saveData(data);
 				});
 			});
 		}else {
