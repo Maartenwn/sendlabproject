@@ -1,6 +1,6 @@
 find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
 
-sftp maurice@192.168.1.3 <<EOF
+sftp maurice@192.168.5.3 <<EOF
 put -r database-link
 put -r event-generator-handler 
 
