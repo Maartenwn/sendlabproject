@@ -17,3 +17,7 @@ body {
 .card_top_events {
   height: 100%;margin-top: 0%; width: 100%;
 }
+
+.highlight {
+  background-color: lightgray
+}

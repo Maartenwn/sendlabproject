@@ -5,6 +5,7 @@ window.$ = window.jquery = require('./../node_modules/jquery');
 window.dt = require('./../node_modules/datatables.net-bs4')();
 require('./../node_modules/datatables.net/js/jquery.dataTables.js')
 require('./../node_modules/datatables.net-bs4/js/dataTables.bootstrap4.js')
+require('./../node_modules/jquery-highlight/jquery.highlight')
 
 
 $(document).ready( function () {
@@ -48,7 +49,12 @@ $(document).ready( function () {
         "scrollY":"790px",
         "scrollCollapse": true
     });
-
+    table.on('draw',()=>{
+        var body = $( table.table().body() );
+ 
+        body.unhighlight();
+        body.highlight( table.search() );   
+    });
     const mqtt = require('mqtt');
     const moment = require('moment');
     const fs = require('fs');
@@ -88,11 +94,11 @@ $(document).ready( function () {
                             $(rowNode).css('color','white');
                             break;
                         case "connection-reastablised":
-                            $(rowNode).css('background','darkgreen');
+                            $(rowNode).css('background','#006400');
                             $(rowNode).css('color','white');
                             break;
                         case "connection-lost":
-                            $(rowNode).css('background','orangered');
+                            $(rowNode).css('background','#FF4500');
                             $(rowNode).css('color','white');
                             break
                         case "sensor-on":
@@ -100,7 +106,7 @@ $(document).ready( function () {
                             $(rowNode).css('color','white');
                             break
                         case "sensor-off":
-                            $(rowNode).css('background','orange');
+                            $(rowNode).css('background','#FFA500');
                             $(rowNode).css('color','black');
                             break
                         case "new-device":
@@ -108,7 +114,7 @@ $(document).ready( function () {
                             $(rowNode).css('color','white');
                             break
                         case "value-odd":
-                            $(rowNode).css('background','yellow');
+                            $(rowNode).css('background','#FFFF00');
                             $(rowNode).css('color','black');
                             break
                         case "undefined-error":
@@ -124,3 +130,5 @@ $(document).ready( function () {
         }
     })
 } );
+
+

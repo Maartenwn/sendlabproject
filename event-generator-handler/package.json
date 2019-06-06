@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ajv": "^6.10.0",
     "moment": "^2.24.0",
     "mqtt": "^2.18.8"
   }

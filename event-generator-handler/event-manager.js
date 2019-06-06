@@ -1,6 +1,8 @@
 const connectionManager = require('./connection-manager');
 const metadataManger = require('./metadata-manager');
 const sensorManager = require('./sensor-manager');
+const oddValueManager = require('./odd-value-manager');
+const newDeviceManager = require('./new-device-manager');
 const moment = require('moment');
 
 var client;
@@ -21,7 +23,9 @@ const sendEvents = async () => {
 const onReceiveData = function(data,isBuffer){
     if(data.identifier){
         connectionManager.addConnectionIfNotExist(data.identifier);
-        metadataManger.checkForMetadata(data,data.identifier);
+        metadataManger.checkForMetadata(data,data.identifier,isBuffer);
+        oddValueManager.checkForOddValue(data,data.identifier,isBuffer);
+        newDeviceManager.checkForNewDevice(data.identifier);
         if (data.sensors) {
             sensorManager.checkSensors(data);
         }
@@ -52,6 +56,8 @@ const onReceiveLastWill = function(data){
 connectionManager.initConnectionManger(addEventToSend);
 sensorManager.initSensorManager(addEventToSend);
 metadataManger.initMetadataManager(addEventToSend);
+oddValueManager.initOddValueManager(addEventToSend);
+newDeviceManager.initNewDeviceManager(addEventToSend);
 
 module.exports = {
     onReceiveData,

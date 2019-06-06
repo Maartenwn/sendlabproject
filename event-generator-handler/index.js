@@ -60,11 +60,11 @@ client.on('message', function (topic, message) {
         const event = {
             "version-events" : "1.0",
             timestamp: moment().toISOString(),
-            identifier:"Undefined error on events/" + id,
+            identifier:"Undefined error on" + topic,
             events: [
                 {
                     "type" : "undefined-error",
-                    "message" : error.message
+                    "message" : error.message + message.toString()
                 }
             ] 
         };
