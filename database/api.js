@@ -39,8 +39,8 @@ app.use(cors(options));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-mongoose.connect('172.18.0.2:27017', { useNewUrlParser: true });
-console.log(mongoose.connection.readyState);
+mongoose.connect('mongodb://172.18.0.3:27017/sendlab', { useNewUrlParser: true });
+console.log(mongoose.connection.readyState + "database" );
 
 var zonnebootModel = mongoose.model('Zonneboot', zonnebootSchema.Zonneboot);
 
@@ -125,7 +125,6 @@ app.post('/data', (req, res) => {
   }
 })
 
-app.listen(1337);
 
 module.exports = {
   saveData,

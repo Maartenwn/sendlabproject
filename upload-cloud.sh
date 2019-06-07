@@ -3,6 +3,7 @@ find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
 sftp maurice@192.168.5.3 <<EOF
 put -r database-link
 put -r event-generator-handler 
+put -r database
 
 mkdir mqtt
 mkdir mqtt/mosquitto
@@ -19,6 +20,7 @@ put mqtt/mosquitto/certs/addServerCertBasedOnIP.sh mqtt/mosquitto/certs/
 mkdir node
 put node/autostart.sh node/
 put node/config.js node/config.js
+
 
 mkdir mongodb
 put mongodb/autostart.sh mongodb/

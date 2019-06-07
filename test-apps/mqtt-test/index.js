@@ -17,7 +17,7 @@ const brokerOptions = {
   protocol: 'mqtts',
   will:{
 	  topic: "LWT",
-	  payload: "{"identifier": 'test_device-001'}",
+	  payload: "{\"identifier\": \"test_device-001\"}",
 	  qos: 2
   }
 }

@@ -3,6 +3,7 @@ find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
 sftp root@134.209.87.163 <<EOF
 put -r database-link
 put -r event-generator-handler 
+put -r database
 
 mkdir mqtt
 mkdir mqtt/mosquitto

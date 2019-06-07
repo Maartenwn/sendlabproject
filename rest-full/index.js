@@ -6,7 +6,7 @@ const router = require('./router.js');
 
 console.log('Starting...');
 
-let isTesting = true;
+let isTesting = false;
 
 var app = express();
 app.use(parser.json());

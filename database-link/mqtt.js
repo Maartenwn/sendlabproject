@@ -1,7 +1,7 @@
 const mqtt = require('mqtt');
 const fs = require('fs');
 const config = require('../node/config.js');
-const database = require("./../database/api");
+const database = require("./../database/api.js");
 
 var KEY = fs.readFileSync("./certs/client.key");
 var CRT = fs.readFileSync("./certs/client.crt");
@@ -21,7 +21,7 @@ const dataTopic = 'data/#';
 const client = mqtt.connect(brokerOptions);
 
 client.on('error', function (err) {
-    console.log(JSON.stringify(err))
+    console.log(err)
 })
 
 client.on('connect',() =>{
@@ -46,14 +46,17 @@ client.on('message', function (topic, message) {
 				var idValue = buffer[0]; //key value of attribute
 				buffer[1].forEach(e => { //loop through array
 					console.log("Identiefier: " + object.identifier + "/" + idValue+  " Timestamp: " + timestamp + '\n' + "data: " + JSON.stringify(e));
-					data.identifier = object.identifier;
-					database.saveData(data);
+					e.identifier = object.identifier;
+					database.saveData(e);
 				});
 			});
 		}else {
 			
 			/*Non-buffer-modus*/
 			console.log("Identiefier: " + object.identifier +  " Timestamp: " + object.timestamp + '\n' + "data: " + JSON.stringify(object.data));
+			object.data.identifier = object.identifier;
+			object.data.timestamp = object.timestamp
+			database.saveData(object.data);
 			//database store method identiefier - timestamp - data
 		}
     } catch (error) {

@@ -10,6 +10,7 @@ ADD oauth /root/oauth
 ADD database-link /root/database-link
 ADD event-generator-handler /root/event-generator-handler
 ADD test-apps /root/test-apps
+ADD database /root/database
 ADD node/config.js /root/node/
 
 ADD node/autostart.sh /
