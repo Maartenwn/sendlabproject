@@ -20,6 +20,7 @@ services:
      - "8080:8080"
     volumes:
      - /var/log/pm2:/root/.pm2/logs:rw
+     - /home/maurice/oauth/db:/root/oauth/db:rw
     tty: true
     stdin_open: true
   mongo:

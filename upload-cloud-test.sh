@@ -1,11 +1,17 @@
+# Script for uploading everything to the test server
+
+# Remove node_modules (too large to upload to the server)
 find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
+
+# Remove dist from Angular app
 rm -rf visualisatie/zonneboot/dist
+
+# Transfer everything to the server
 sftp maurice@192.168.5.4 <<EOF
 put -r database-link
 put -r event-generator-handler 
 put -r database
 put -r zonneboot-websocket
-
 
 mkdir mqtt
 mkdir mqtt/mosquitto
@@ -19,7 +25,6 @@ put mqtt/mosquitto/mosquitto.conf mqtt/mosquitto/
 put -r mqtt/mosquitto/certs/crl mqtt/mosquitto/certs/
 put mqtt/mosquitto/certs/addServerCertBasedOnIP.sh mqtt/mosquitto/certs/
 put mqtt/mosquitto/certs/addCert.sh mqtt/mosquitto/certs/
-
 
 mkdir node
 put node/autostart.sh node/
@@ -41,3 +46,5 @@ put docker-compose.yml
 put Dockerfile
 bye
 EOF
+
+# RUN AFTER UPLOAD (on server): docker-compose up -d --remove-orphans --build --force-recreate 
