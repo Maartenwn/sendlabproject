@@ -31,11 +31,15 @@ app.use(function (req, res, next) {
 });
 
 app.all('*', (req, res, next) => {
+    console.log(req.url);
+    if (req.url.split("?")[0].includes("/device/zonneboot")) {
+        return next();
+    }
     if (req.headers.authorization == undefined) {
         res.status(401).send('Unauthorized');
         return;
     }
-    
+
     let typeKey = req.headers.authorization.split(' ')[0];
     let access_token = req.headers.authorization.split(' ')[1];
 

@@ -1,0 +1,6 @@
+/* @import '~@angular/material/prebuilt-themes/deeppurple-amber.css'; */
+@import './app/custom-theme.css';
+
+body {
+    background: whitesmoke;
+}

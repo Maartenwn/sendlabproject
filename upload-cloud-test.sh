@@ -1,5 +1,5 @@
 find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
-
+rm -rf visualisatie/zonneboot/dist
 sftp maurice@192.168.5.4 <<EOF
 put -r database-link
 put -r event-generator-handler 
@@ -29,6 +29,10 @@ mkdir mongodb
 put mongodb/autostart.sh mongodb/
 put mongodb/mongodb.conf mongodb/
 put mongodb/Dockerfile mongodb/
+
+mkdir visualisatie
+mkdir visualisatie/zonneboot
+put -r visualisatie/zonneboot visualisatie
 
 put -r oauth 
 put -r rest-full
