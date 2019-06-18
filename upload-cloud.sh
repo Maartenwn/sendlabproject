@@ -1,5 +1,12 @@
+# Script for uploading everything to the test server
+
+# Remove node_modules (too large to upload to the server)
 find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
+
+# Remove dist from Angular app
 rm -rf visualisatie/zonneboot/dist
+
+# Transfer everything to the server
 sftp -oPort=20000 maurice@SendLab.avansti.nl<<EOF
 put -r database-link
 put -r event-generator-handler 
@@ -39,3 +46,5 @@ put docker-compose.yml
 put Dockerfile
 bye
 EOF
+
+# RUN AFTER UPLOAD (on server): docker-compose up -d --remove-orphans --build --force-recreate 
