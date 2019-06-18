@@ -4,6 +4,8 @@ sftp maurice@192.168.5.4 <<EOF
 put -r database-link
 put -r event-generator-handler 
 put -r database
+put -r zonneboot-websocket
+
 
 mkdir mqtt
 mkdir mqtt/mosquitto

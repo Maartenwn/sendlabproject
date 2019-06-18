@@ -66,3 +66,4 @@ yarn-error.log*
 View changes
 commit:5aa565
 Initital commit 
+events-logger/out/

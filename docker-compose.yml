@@ -17,6 +17,7 @@ services:
     ports:
      - "23450:23450"
      - "34219:34219"
+     - "8080:8080"
     volumes:
      - /var/log/pm2:/root/.pm2/logs:rw
     tty: true
