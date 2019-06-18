@@ -4,12 +4,22 @@ const jwt = require('jsonwebtoken');
 const key = require('./jwt.js');
 const router = require('./router.js');
 const cors = require('cors');
+const fs = require('fs')
 
 console.log('Starting...');
+var https = require('https');
+var privateKey  = fs.readFileSync('ssl-sert/privkey.pem', 'utf8');
+var certificate = fs.readFileSync('ssl-sert/fullchain.pem', 'utf8');
+var credentials = {key: privateKey, cert: certificate};
 
 let isTesting = false;
 
 var app = express();
+
+var httpsServer = https.createServer(credentials, app);
+httpsServer.listen(23450);
+
+
 app.use(parser.json());
 app.use(parser.urlencoded({ extended: true }));
 app.use(cors());
@@ -48,6 +58,3 @@ app.all('*', (req, res, next) => {
 });
 app.use('/IoT/api', router);
 
-app.listen(23450, function () {
-    console.log('server started');
-});

@@ -10,6 +10,12 @@ var express = require("express");
 var moment = require('moment');
 const cors = require('cors');
 
+const fs = require('fs');
+const https = require('https');
+var privateKey  = fs.readFileSync('ssl-sert/privkey.pem', 'utf8');
+var certificate = fs.readFileSync('ssl-sert/fullchain.pem', 'utf8');
+var credentials = {key: privateKey, cert: certificate};
+
 var _require = require('./shadow/jwt.js'),
     private_key = _require.private_key;
 
@@ -42,11 +48,16 @@ app.all("*", function (req, res, next) {
     console.log(req.method + " " + req.url + " has been invoked!");
     next();
 });
-app.listen(port, '0.0.0.0', function () {
-    console.log("server started at http://localhost:".concat(port));
-    setInterval(function () {
-    }, 5000);
-});
+
+var httpsServer = https.createServer(credentials, app);
+httpsServer.listen(port);
+
+// app.listen(port, '0.0.0.0', function () {
+//   console.log("server started at http://localhost:".concat(port));
+//   setInterval(function () {
+//     console.log(user.sessions.size);
+//   }, 5000);
+// });
 
 function hash(password, salt) {
     var hash = crypto.createHmac('sha512', salt);

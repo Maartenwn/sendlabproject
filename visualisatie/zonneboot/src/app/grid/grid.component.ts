@@ -8,8 +8,8 @@ import {DataService} from '../services/data.service';
 })
 
 export class GridComponent implements OnInit {
-    _username: string = 'root';
-    _password: string = 'MacSnoer:G3AhBAUdUR23GfI1NOWktg';
+    _username: string = '';
+    _password: string = '';
     _authorizationToken: string;
     _refreshToken: string;
 
