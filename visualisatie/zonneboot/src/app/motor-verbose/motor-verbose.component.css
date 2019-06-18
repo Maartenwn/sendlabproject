@@ -1,0 +1,71 @@
+:host /deep/ .cross-split {
+    overflow-y: hidden;
+    height: 50%;
+    width: 50%;
+    position: absolute;
+    z-index: 1;
+    overflow-x: hidden;
+}
+
+:host /deep/ .vertical-split {
+    overflow-y: hidden;
+    height: 100%;
+    width: 25%;
+    position: absolute;
+    z-index: 1;
+    overflow-x: hidden;
+}
+
+:host /deep/ .left {
+    border-radius: 15px 0 0 15px;
+    left: 0;
+}
+
+:host /deep/ .middle-left {
+    left: 25%;
+}
+
+:host /deep/ .right {
+    border-radius: 0 15px 15px 0;
+    right: 0;
+}
+
+:host /deep/ .middle-right {
+    right: 25%;
+}
+
+:host /deep/ .top-left {
+    border-radius: 15px 0 0 0;
+    bottom: 50%;
+    top: 0;
+}
+
+:host /deep/ .bottom-left {
+    border-radius: 0 0 0 15px;
+    left: 0;
+    top: 50%;
+}
+
+:host /deep/ .top-right {
+    border-radius: 0 15px 0 0;
+    bottom: 50%;
+    right: 0;
+}
+
+:host /deep/ .bottom-right {
+    border-radius: 0 0 15px 0;
+    top: 50%;
+    right: 0;
+}
+
+:host /deep/ .centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 95%;
+    width: 95%;
+    transform: translate(-50%, -50%);
+}
+
+
+

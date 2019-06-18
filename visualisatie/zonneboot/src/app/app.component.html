@@ -1,0 +1,7 @@
+<header>
+  <app-header (selectEvent)="receiveSelected($event)"></app-header>
+</header>
+
+<div style="width:98%; height:88%; position:fixed; left:1%;top:10%;overflow:hidden;">
+  <app-grid [selectedComponents]="this.selected"></app-grid>
+</div>

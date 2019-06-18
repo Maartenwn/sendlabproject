@@ -1,0 +1,15 @@
+:host /deep/ .mat-list-item-content {
+    margin: 0 !important;
+    top: 50% !important;
+}
+
+.mat-list {
+    border-radius:15px;
+}
+
+:host /deep/ .mat-divider {
+    bottem: -300% !important;
+}
+.mat-slide-toggle.mat-disabled{
+    opacity: 1 !important;
+  }

@@ -31,3 +31,11 @@ services:
      - /data:/data
     tty: true
     stdin_open: true
+  visualisatie-zonneboot:
+    build: ./visualisatie/zonneboot
+    image: sendlab-vis-zonneboot/ubuntu
+    container_name: sendlab-vis-zonneboot-ubuntu
+    ports:
+     - "4200:80"
+    tty: true
+    stdin_open: true

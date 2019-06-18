@@ -301,11 +301,6 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.0.8.tgz#551466be11b2adc3f3d47156758f610bd9f6b1d8"
   integrity sha512-b8bbUOTwzIY3V5vDTY1fIJ+ePKDUBqt2hC2woVGotdQQhG/2Sh62HOKHrT7ab+VerXAcPyAiTEipPu/FsreUtg==
 
-"@types/node@^10.12.18":
-  version "10.14.9"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.14.9.tgz#2e8d678039d27943ce53a1913386133227fd9066"
-  integrity sha512-NelG/dSahlXYtSoVPErrp06tYFrvzj8XLWmKA+X8x0W//4MqbUyZu++giUG/v0bjAT6/Qxa8IjodrfdACyb0Fg==
-
 "@types/node@^7.0.12":
   version "7.10.6"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-7.10.6.tgz#c42137f0f2f6458bf0c898d65f48c5f600911475"
@@ -2714,21 +2709,21 @@ electron-wix-msi@^2.1.1:
     lodash "^4.17.10"
     uuid "^3.3.2"
 
+electron@3.0.10:
+  version "3.0.10"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-3.0.10.tgz#7d412856e8cf0d3041a612a32dd09e2af2d50f50"
+  integrity sha512-I39IeQP3NOlbjKzTDK8uK2JdiHDfhV5SruCS2Gttkn2MaKCY+yIzQ6Wr4DyBXLeTEkL1sbZxbqQVhCavAliv5w==
+  dependencies:
+    "@types/node" "^8.0.24"
+    electron-download "^4.1.0"
+    extract-zip "^1.0.3"
+
 electron@4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/electron/-/electron-4.0.0.tgz#6ccb40cc8bf2d49954dcea73b97ae7ad12ee04b3"
   integrity sha512-3XPG/3IXlvnT1oe1K6zEushoD0SKbP8xwdrL10EWGe6k2iOV4hSHqJ8vWnR8yZ7VbSXmBRfomEFDNAo/q/cwKw==
   dependencies:
     "@types/node" "^8.0.24"
-    electron-download "^4.1.0"
-    extract-zip "^1.0.3"
-
-electron@5.0.2:
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-5.0.2.tgz#0f6b38ae7e344b94f433d9171e50568f56962fc7"
-  integrity sha512-bUHKQhyuOen/q8iHTkrnzqB9CAwBDI+vHbeu21kpq2bqAD+t25yfrmUEcYHaPL4fZOAhk6nnRqskF6/Xd+aZxg==
-  dependencies:
-    "@types/node" "^10.12.18"
     electron-download "^4.1.0"
     extract-zip "^1.0.3"
 

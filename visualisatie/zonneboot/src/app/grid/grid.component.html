@@ -1,0 +1,12 @@
+<ngx-widget-grid [rows]="grids[inputs.len].grid.rows" [columns]="grids[inputs.len].grid.columns" [highlightNextPosition]="false"
+                 [showGrid]="false" (widgetPositionChange)="onWidgetChange($event)">
+    <ngx-widget *ngFor="let tile of grids[inputs.len].tiles; let i = index;" [attr.data-index]="i"
+                [position]="{top: tile.top,left: tile.left,height: tile.height,width: tile.width}"
+                [movable]="movable" [resizable]="false" [swapOnMove]="movable">
+        <div style="height:100%;width:100%;display:flex;">
+            <div id="content" style="height:100%; width:100%;border-radius:15px; background-color: white;">
+                <ndc-dynamic [ndcDynamicComponent]="components[i]" [ndcDynamicInputs]="inputs"></ndc-dynamic>
+            </div>
+        </div>
+    </ngx-widget>
+</ngx-widget-grid>
