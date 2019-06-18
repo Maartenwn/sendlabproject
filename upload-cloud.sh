@@ -1,5 +1,5 @@
 find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
-
+rm -rf visualisatie/zonneboot/dist
 sftp -oPort=20000 maurice@SendLab.avansti.nl<<EOF
 put -r database-link
 put -r event-generator-handler 
@@ -19,16 +19,18 @@ put -r mqtt/mosquitto/certs/crl mqtt/mosquitto/certs/
 put mqtt/mosquitto/certs/addServerCertBasedOnIP.sh mqtt/mosquitto/certs/
 put mqtt/mosquitto/certs/addCert.sh mqtt/mosquitto/certs/
 
-
 mkdir node
 put node/autostart.sh node/
 put node/config.js node/config.js
-
 
 mkdir mongodb
 put mongodb/autostart.sh mongodb/
 put mongodb/mongodb.conf mongodb/
 put mongodb/Dockerfile mongodb/
+
+mkdir visualisatie
+mkdir visualisatie/zonneboot
+put -r visualisatie/zonneboot visualisatie
 
 put -r oauth 
 put -r rest-full
@@ -37,5 +39,3 @@ put docker-compose.yml
 put Dockerfile
 bye
 EOF
-
-pause
