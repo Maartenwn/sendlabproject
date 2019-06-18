@@ -1,0 +1,35 @@
+<mat-toolbar>
+    <div class="left">
+        <mat-form-field class="example-full-width">
+            <input matInput [matDatepicker]="picker" placeholder="Choose a date">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker touchUi #picker></mat-datepicker>
+        </mat-form-field>
+    </div>
+    <div class="center">
+        <mat-button-toggle [value]="GPS" (change)="onValChange($event)">
+            GPS
+        </mat-button-toggle>
+        <mat-button-toggle [value]="Livestream" (change)="onValChange($event)">
+            Livestream
+        </mat-button-toggle>
+        <mat-button-toggle [value]="Throttle" (change)="onValChange($event)">
+            Throttle
+        </mat-button-toggle>
+        <mat-button-toggle [value]="Flags" (change)="onValChange($event)">
+            Flags
+        </mat-button-toggle>
+        <mat-button-toggle [value]="Motor" (change)="onValChange($event)">
+            Motor
+        </mat-button-toggle>
+        <mat-button-toggle [value]="SolarPanel" (change)="onValChange($event)">
+            Solarpanel
+        </mat-button-toggle>
+        <mat-button-toggle [value]="Battery" (change)="onValChange($event)">
+            Battery
+        </mat-button-toggle>
+    </div>
+    <div class="right">
+        <button mat-button (click)="openDialog()">Help</button>
+    </div>
+</mat-toolbar>

@@ -1,0 +1,49 @@
+<mat-list id="list" style="height: 100%; padding-top: 0px">
+    <mat-list-item [style.height]="itemHeight">
+        {{ simpleItems[0] }}
+        <span style="width: 100%;"></span>
+        <mat-slide-toggle color="primary" [checked]="motorDirectionCheck" disabled="disabled"></mat-slide-toggle>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item [style.height]="itemHeight">
+        {{ simpleItems[1] }}
+        <span style="width: 100%;"></span>
+        <mat-slide-toggle color="primary" [checked]="motorEnableCheck" disabled="disabled"></mat-slide-toggle>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item [style.height]="itemHeight">
+        {{ simpleItems[2] }}
+        <span style="width: 100%;"></span>
+        <mat-slide-toggle color="primary" [checked]="motorReadyCheck" disabled="disabled"></mat-slide-toggle>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item [style.height]="itemHeight">
+        {{ simpleItems[3] }}
+        <span style="width: 100%;"></span>
+        <mat-slide-toggle color="primary" [checked]="failSafeCheck" disabled="disabled"></mat-slide-toggle>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item [style.height]="itemHeight">
+        {{ simpleItems[4] }}
+        <span style="width: 100%;"></span>
+        <mat-slide-toggle color="primary" [checked]="timeOutCheck" disabled="disabled"></mat-slide-toggle>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item [style.height]="itemHeight">
+        {{ simpleItems[5] }}
+        <span style="width: 100%;"></span>
+        <mat-slide-toggle color="primary" [checked]="overVoltageCheck" disabled="disabled"></mat-slide-toggle>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item [style.height]="itemHeight">
+        {{ simpleItems[6] }}
+        <span style="width: 100%;"></span>
+        <mat-slide-toggle color="primary" [checked]="underVoltageCheck" disabled="disabled"></mat-slide-toggle>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item [style.height]="itemHeight">
+        {{ simpleItems[7] }}
+        <span style="width: 100%;"></span>
+        <mat-slide-toggle color="primary" [checked]="GPSFixCheck" disabled="disabled"></mat-slide-toggle>
+    </mat-list-item>
+</mat-list>
