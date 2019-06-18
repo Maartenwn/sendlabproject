@@ -15,7 +15,8 @@ const createWindow = () => {
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      devTools: false
     }
   });
 
@@ -23,7 +24,7 @@ const createWindow = () => {
   mainWindow.loadURL(`file://${__dirname}/index.html`);
   mainWindow.setFullScreen(true);
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  mainWindow.webContents.on("devtools-opened", () => { mainWindow.webContents.closeDevTools(); });
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
