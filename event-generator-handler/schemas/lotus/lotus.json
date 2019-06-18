@@ -1,0 +1,129 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "v_min":{
+            "type":"number",
+            "minimum": 0,
+            "maximum": 5
+        },
+        "v_max":{
+            "type":"number",
+            "minimum": 0,
+            "maximum": 5
+        },"v_avg":{
+            "type":"number",
+            "minimum": 0,
+            "maximum": 5
+        }
+        
+        ,"i_batt":{
+            "type":"number",
+            "minimum": -1000,
+            "maximum": 1000
+        },"i_motor":{
+            "type":"number",
+            "minimum":-1000,
+            "maximum": 1000
+        },"i_acc":{
+            "type":"number",
+            "minimum":0,
+            "maximum": 15
+        }
+        
+        ,"t_min":{
+            "type":"number",
+            "minimum":-100,
+            "maximum": 200
+        },"t_max":{
+            "type":"number",
+            "minimum":-100,
+            "maximum": 200
+        },"t_avg":{
+            "type":"number",
+            "minimum":-100,
+            "maximum": 200
+        },"t_motor":{
+            "type":"number",
+            "minimum":-100,
+            "maximum": 200
+        },"t_pue":{
+            "type":"number",
+            "minimum":-100,
+            "maximum": 200
+        }
+
+        ,"soc":{
+            "type":"number",
+            "minimum":0,
+            "maximum": 100
+        },"motor":{
+            "type":"number",
+            "minimum":0,
+            "maximum": 35000
+        }
+        
+        ,"v_line1":{
+            "type":"number",
+            "minimum":0,
+            "maximum": 253
+        },"v_line2":{
+            "type":"number",
+            "minimum":0,
+            "maximum": 253
+        },"v_line3":{
+            "type":"number",
+            "minimum":0,
+            "maximum": 253
+        }
+
+        ,"i_line1":{
+            "type":"number",
+            "minimum":0,
+            "maximum": 60
+        },"i_line2":{
+            "type":"number",
+            "minimum":0,
+            "maximum": 60
+        },"i_line3":{
+            "type":"number",
+            "minimum":0,
+            "maximum": 60
+        }
+
+        ,"p_line":{
+            "type":"number",
+            "minimum":0,
+            "maximum": 150000
+        },"v_aps":{
+            "type":"number",
+            "minimum":0,
+            "maximum": 24
+        },"v_setpoint":{
+            "type":"number",
+            "minimum":0,
+            "maximum": 24
+        },"i_setpoint":{
+            "type":"number",
+            "minimum":0,
+            "maximum": 16
+        },"error":{
+            "type":"number",
+            "minimum": 0,
+            "maximum": 23
+        },"latitude":{
+            "type": "number",
+            "minimum": 0,
+            "maximum": 9000
+        },"longitude":{
+            "type": "number",
+            "minimum": 0,
+            "maximum": 18000
+        },"altitude":{
+            "type": "number",
+            "minimum": -500,
+            "maximum": 6000
+        }
+
+    }
+}
