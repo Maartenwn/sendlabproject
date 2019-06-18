@@ -16,6 +16,8 @@ put mqtt/mosquitto/acl mqtt/mosquitto/
 put mqtt/mosquitto/mosquitto.conf mqtt/mosquitto/
 put -r mqtt/mosquitto/certs/crl mqtt/mosquitto/certs/
 put mqtt/mosquitto/certs/addServerCertBasedOnIP.sh mqtt/mosquitto/certs/
+put mqtt/mosquitto/certs/addCert.sh mqtt/mosquitto/certs/
+
 
 mkdir node
 put node/autostart.sh node/

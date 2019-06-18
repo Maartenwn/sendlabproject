@@ -1,0 +1,14 @@
+De api bestaat uit 2 verschillende manier van versturen van data.
+
+De normale modes is geschikt voor data die op 1 tijdstip verzamelt wordt en gelijk verstuurt wordt
+
+De buffer modes is geschikt voor data die op verschillende tijden los van elkaar binnenkomt en dan in 1 keer verstuurd moet worden.
+
+ca.crt is de Certificate Authority die je moet implementeren
+client.crt is de de client certificate
+client.key is de key file behorende bij de client certificate
+
+afhankelijk van de gestuurde data kunnen er events onstaan. Deze worden verstuurd op de mqtt topic events/|identifier-type|
+
+in example test.js is voorbeeld code geschreven voor node m.b.v mqtt.js. Deze file bevat zowel de buffer als normale testcode
+De certificates moeten geplaatst worden in de map certs

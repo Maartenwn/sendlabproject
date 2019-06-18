@@ -65,7 +65,7 @@ $(document).ready( function () {
     
     const brokerOptions = {
         port: 8883,
-        host: '134.209.87.163',
+        host: 'SendLab.avansti.nl',
         key: KEY,
         cert: CERT,
         rejectUnauthorized: true,

@@ -3,6 +3,7 @@ const parser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const key = require('./jwt.js');
 const router = require('./router.js');
+const cors = require('cors');
 
 console.log('Starting...');
 
@@ -11,6 +12,7 @@ let isTesting = false;
 var app = express();
 app.use(parser.json());
 app.use(parser.urlencoded({ extended: true }));
+app.use(cors());
 
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');

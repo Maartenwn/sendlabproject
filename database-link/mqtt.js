@@ -45,19 +45,31 @@ client.on('message', function (topic, message) {
 			bufferdata.forEach(buffer => {
 				var idValue = buffer[0]; //key value of attribute
 				buffer[1].forEach(e => { //loop through array
-					console.log("Identiefier: " + object.identifier + "/" + idValue+  " Timestamp: " + timestamp + '\n' + "data: " + JSON.stringify(e));
-					e.identifier = object.identifier;
-					database.saveData(e);
+					//console.log("Identiefier: " + object.identifier + "/" + idValue+  " Timestamp: " + e.timestamp + '\n' + "data: " + JSON.stringify(e));
+					//e.identifier = object.identifier + "/" + idValue;
+					var send = {};
+					send.identifier = object.identifier;
+					var data = {};
+					data[idValue] = e;
+					data.timestamp = object.timestamp;
+					send.data = data;
+					//console.log(send);
+					database.saveData(send);
 				});
 			});
 		}else {
 			
 			/*Non-buffer-modus*/
-			console.log("Identiefier: " + object.identifier +  " Timestamp: " + object.timestamp + '\n' + "data: " + JSON.stringify(object.data));
-			object.data.identifier = object.identifier;
-			object.data.timestamp = object.timestamp
-			database.saveData(object.data);
-			//database store method identiefier - timestamp - data
+			//console.log("Identiefier: " + object.identifier +  " Timestamp: " + object.timestamp + '\n' + "data: " + JSON.stringify(object.data));
+			//object.data.identifier = object.identifier;
+			//object.data.timestamp = object.timestamp
+
+			var send = {};
+			send.identifier = object.identifier;
+			send.data = object.data;
+			send.timestamp = object.timestamp;
+			//console.log(send);
+			database.saveData(send);
 		}
     } catch (error) {
         

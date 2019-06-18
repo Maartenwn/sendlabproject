@@ -5,7 +5,9 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 var swaggerJsdoc = require('swagger-jsdoc');
 var swaggerUi = require('swagger-ui-express')
+
 var zonnebootSchema = require('./Schemas/ZonnebootSchema');
+var testDeviceSchema = require('./Schemas/TestSchema.js');
 
 const swaggerOptions = {
   swaggerDefinition: {
@@ -19,7 +21,8 @@ const swaggerOptions = {
 };
 
 const schemas = {
-  'zonneboot-001': mongoose.model('zonneboot', zonnebootSchema.Zonneboot),
+  'zonneboot-001': mongoose.model('zonneboot', zonnebootSchema.zonneboot),
+  'test_device-001': mongoose.model('test_device',testDeviceSchema.testdata)
 }
 
 const specs = swaggerJsdoc(swaggerOptions);
@@ -39,10 +42,10 @@ app.use(cors(options));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-mongoose.connect('mongodb://172.18.0.3:27017/sendlab', { useNewUrlParser: true });
+mongoose.connect('mongodb://172.18.0.2:27017/sendlab', { useNewUrlParser: true });
 console.log(mongoose.connection.readyState + "database" );
 
-var zonnebootModel = mongoose.model('Zonneboot', zonnebootSchema.Zonneboot);
+//var zonnebootModel = mongoose.model('Zonneboot', zonnebootSchema.Zonneboot);
 
 /**
  * @swagger
@@ -69,7 +72,7 @@ app.post('/zonneboot', (req, res) => {
 })
 
 const saveData = function (data) {
-  var identifier = data.identifier;
+  var identifier = data.identifier.split('/')[0];
   var model = schemas[identifier];
   if (!(model === undefined)) {
     var data = new model(data.data);

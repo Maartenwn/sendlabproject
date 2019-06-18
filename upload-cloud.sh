@@ -1,6 +1,6 @@
 find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
 
-sftp maurice@192.168.5.3 <<EOF
+sftp -oPort=20000 maurice@SendLab.avansti.nl<<EOF
 put -r database-link
 put -r event-generator-handler 
 put -r database
@@ -16,6 +16,8 @@ put mqtt/mosquitto/acl mqtt/mosquitto/
 put mqtt/mosquitto/mosquitto.conf mqtt/mosquitto/
 put -r mqtt/mosquitto/certs/crl mqtt/mosquitto/certs/
 put mqtt/mosquitto/certs/addServerCertBasedOnIP.sh mqtt/mosquitto/certs/
+put mqtt/mosquitto/certs/addCert.sh mqtt/mosquitto/certs/
+
 
 mkdir node
 put node/autostart.sh node/
@@ -34,3 +36,5 @@ put docker-compose.yml
 put Dockerfile
 bye
 EOF
+
+pause

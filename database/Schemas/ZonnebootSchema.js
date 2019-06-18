@@ -781,5 +781,5 @@ const zonnebootSchema = new mongoose.Schema({
 })
 
 module.exports = {
-    Zonneboot: zonnebootSchema
+    zonneboot: zonnebootSchema
 };

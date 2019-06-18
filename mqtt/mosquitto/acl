@@ -18,6 +18,11 @@ topic write data/zonnepanelen
 topic read events/zonnepanelen
 topic write LWT
 
+user weerstation
+topic write data/weerstation
+topic read events/weerstation
+topic write LWT
+
 user test_device
 topic write data/test_device
 topic write LWT

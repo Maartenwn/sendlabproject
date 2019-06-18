@@ -7,6 +7,7 @@ var crypto = require("crypto");
 var express = require("express");
 
 var moment = require('moment');
+const cors = require('cors');
 
 var _require = require('./shadow/jwt.js'),
     private_key = _require.private_key;
@@ -28,6 +29,7 @@ var port = 34219;
 var RefreshTokenLifeTimeMs = 7 * 24 * 60 * 60 * 1000; //const RefreshTokenLifeTimeMs = 60000;
 
 app.use(bodyParser.json());
+app.use(cors());
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");

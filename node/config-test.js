@@ -1,4 +1,4 @@
-const host = '192.168.5.4';
+const host = 'SendLab.avansti.nl';
 
 module.exports = {
   host
