@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 
 const throttle = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -20,7 +20,7 @@ const throttle = new mongoose.Schema({
 
 const phase = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
     
@@ -32,7 +32,7 @@ const phase = new mongoose.Schema({
 
 const steer = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -44,7 +44,7 @@ const steer = new mongoose.Schema({
 
 const mtrState = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -71,7 +71,7 @@ const mtrState = new mongoose.Schema({
 
 const mtrSpeed = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -88,7 +88,7 @@ const mtrSpeed = new mongoose.Schema({
 
 const mtrPower = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -115,7 +115,7 @@ const mtrPower = new mongoose.Schema({
 
 const mtrFlags = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -142,7 +142,7 @@ const mtrFlags = new mongoose.Schema({
 
 const mtrVerbose = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -169,7 +169,7 @@ const mtrVerbose = new mongoose.Schema({
 
 const bms0 = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -181,7 +181,7 @@ const bms0 = new mongoose.Schema({
 
 const bms1 = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -193,7 +193,7 @@ const bms1 = new mongoose.Schema({
 
 const bms2 = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -205,7 +205,7 @@ const bms2 = new mongoose.Schema({
 
 const bms3 = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -217,7 +217,7 @@ const bms3 = new mongoose.Schema({
 
 const bms4 = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -229,7 +229,7 @@ const bms4 = new mongoose.Schema({
 
 const bms5 = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -241,7 +241,7 @@ const bms5 = new mongoose.Schema({
 
 const bms6 = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -253,7 +253,7 @@ const bms6 = new mongoose.Schema({
 
 const bms7 = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -265,7 +265,7 @@ const bms7 = new mongoose.Schema({
 
 const bms8 = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -277,7 +277,7 @@ const bms8 = new mongoose.Schema({
 
 const bms9 = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -290,7 +290,7 @@ const bms9 = new mongoose.Schema({
 
 const bms10 = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -302,7 +302,7 @@ const bms10 = new mongoose.Schema({
 
 const bms11 = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -314,7 +314,7 @@ const bms11 = new mongoose.Schema({
 
 const bmsMsg1 = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -351,7 +351,7 @@ const bmsMsg1 = new mongoose.Schema({
 
 const bmsMsg2 = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -383,7 +383,7 @@ const bmsMsg2 = new mongoose.Schema({
 
 const bmsMsg3 = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -400,7 +400,7 @@ const bmsMsg3 = new mongoose.Schema({
 
 const mppt1 = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -437,7 +437,7 @@ const mppt1 = new mongoose.Schema({
 
 const mppt2 = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -474,7 +474,7 @@ const mppt2 = new mongoose.Schema({
 
 const mppt3 = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -511,7 +511,7 @@ const mppt3 = new mongoose.Schema({
 
 const mppt4 = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -548,7 +548,7 @@ const mppt4 = new mongoose.Schema({
 
 const gpsLoc = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -565,7 +565,7 @@ const gpsLoc = new mongoose.Schema({
 
 const gpsInfo = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
     },
 
@@ -595,42 +595,16 @@ const gpsInfo = new mongoose.Schema({
     }
 })
 
-/** 
- * @swagger
- * definitions:
- *  zonneboot:
- *      properties:
- *          timestamp:
- *              type: Date
- *          gps:
- *             required: 
- *              - long
- *              - lat
- *             properties:
- *              long:
- *                  type: number
- *                  min: -180
- *                  max: 180
- *              lat:
- *                  type: number
- *                  min: -90
- *                  max: 90
- *          imu:
- *              type: imu
- *          throttle:
- *              type: throttle
- *          bms:
- *              type: bms
- *          motor:
- *              type: motor
- *          mppts:
- *              type: mppts
- */
 
 const zonnebootSchema = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         required: true
+    },
+
+    deviceNumber : {
+        type: Number,
+        required : true
     },
 
     throttle: {
@@ -781,5 +755,5 @@ const zonnebootSchema = new mongoose.Schema({
 })
 
 module.exports = {
-    zonneboot: zonnebootSchema
+    Zonneboot: zonnebootSchema
 };
