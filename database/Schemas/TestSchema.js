@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 const testData1 = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         default: undefined
     },
 
@@ -14,7 +14,7 @@ const testData1 = new mongoose.Schema({
 
 const testData2 = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         default: undefined
     },
 
@@ -26,7 +26,7 @@ const testData2 = new mongoose.Schema({
 
 const testData3 = new mongoose.Schema({
     timestamp: {
-        type: String,
+        type: Number,
         default: undefined
     },
 
@@ -37,8 +37,13 @@ const testData3 = new mongoose.Schema({
 });
 
 const testSchema = new mongoose.Schema({
+    deviceNumber : {
+        type : Number,
+        default : undefined
+    },
+
     timestamp: {
-        type: String,
+        type: Number,
         default: undefined
     },
 
@@ -59,5 +64,5 @@ const testSchema = new mongoose.Schema({
 });
 
 module.exports = {
-    testdata: testSchema
+    TestData: testSchema
 };
