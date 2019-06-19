@@ -10,7 +10,7 @@ var CRT = fs.readFileSync("./certs/client.crt");
 var CA  = fs.readFileSync("./certs/ca.crt");
 
 const brokerOptions = {
-    port: 8883,
+    port: config.port,
     host: config.host,
     key: KEY,
     cert: CRT,
