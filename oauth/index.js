@@ -52,12 +52,12 @@ app.all("*", function (req, res, next) {
 var httpsServer = https.createServer(credentials, app);
 httpsServer.listen(port);
 
-// app.listen(port, '0.0.0.0', function () {
-//   console.log("server started at http://localhost:".concat(port));
-//   setInterval(function () {
-//     console.log(user.sessions.size);
-//   }, 5000);
-// });
+//app.listen(port, '0.0.0.0', function () {
+//  console.log("server started at http://localhost:".concat(port));
+//  setInterval(function () {
+//    console.log(sessions.size);
+//  }, 5000);
+//});
 
 function hash(password, salt) {
     var hash = crypto.createHmac('sha512', salt);
@@ -89,8 +89,6 @@ app.post("/changepasword/a0f968f281de1a4650b873fcbcf6fe0f", function (request, r
     var previousPassword = request.body.previousPassword;
     var newPassword = request.body.newPassword;
     var newSalt;
-
-    localStorage.clear();
 
     if (localStorage.length == 0) {
         console.log("no user");
