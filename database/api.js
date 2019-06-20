@@ -9,7 +9,8 @@ var zonnebootSchema = require('./Schemas/ZonnebootSchema');
 var testSchema = require('./Schemas/TestSchema');
 var lotusSchema = require('./Schemas/LotusSchema');
 var warmptePompSchema = require('./Schemas/WarmtePompSchema');
-var weerStationSchema = require('./Schemas/WeerstationSchema')
+var weerStationSchema = require('./Schemas/WeerstationSchema');
+var deviceSchema = require('./Schemas/DevicesSchema');
 
 const swaggerOptions = {
   swaggerDefinition: {
@@ -36,10 +37,11 @@ const specs = swaggerJsdoc(swaggerOptions);
 mongoose.connect('mongodb://172.18.0.2:27017/sendlab', { useNewUrlParser: true });
 console.log(mongoose.connection.readyState);
 
+
 const saveData = function (data) {
   var identifier = data.identifier;
-  if (identifier.includes('-')) {
-    var identifierSplits = identifier.split('-');
+  if (identifier.includes('|')) {
+    var identifierSplits = identifier.split('|');
     identifier = identifierSplits[0];
     var deviceNumber = identifierSplits[1];
   }
@@ -51,12 +53,34 @@ const saveData = function (data) {
     var data = new model(data.data);
     data.save((err, data) => {
       if (err) {
-        console.log(err.message);
+        return err.message;
       }
     });
   } else {
-    console.log({ "Error": "Schema not found : " + data.identifier });
+    return ({ "Error": "Schema not found : " + data.identifier });
   }
+}
+
+var devicesInDB = [];
+
+
+function saveDeviceInDatabase(identifier, deviceNumber) {
+  var model = mongoose.model('Device', deviceSchema.Devices);
+  var query = model.find({}, { '_id': 0, '__v': 0 });
+  query.then(data => {
+
+    console.log(devicesInDB)
+    var saveData = { "deviceName": identifier, "deviceNumber": deviceNumber }
+    if (devicesInDB.some(x => x.deviceName === identifier && x.deviceNumber === parseInt(deviceNumber, 10))) { console.log("found") }
+    else {
+      devicesInDB.push(saveData);
+      new model(saveData).save();
+    }
+  })
+}
+
+const getDevices = function () {
+  return devicesInDB;
 }
 
 const getHistoricData = function (deviceID, beginDate, endDate) {
@@ -73,8 +97,8 @@ const getHistoricData = function (deviceID, beginDate, endDate) {
   };
 
 
-  if (identifier.includes('-')) {
-    var identifierSplits = identifier.split('-');
+  if (identifier.includes('|')) {
+    var identifierSplits = identifier.split('|');
     identifier = identifierSplits[0];
     var deviceNumber = identifierSplits[1];
   };
@@ -89,6 +113,7 @@ const getHistoricData = function (deviceID, beginDate, endDate) {
         var agg = [
           `[
               {"$match": { "$and": [{ "deviceNumber" : ${deviceNumber} },{ "${subdoc}": { "$exists": 1 } } , {"${subdoc}.timestamp" : { "$gte" : ${parsedBeginDate}, "$lte" : ${parsedEndDate} }}] } } ,
+              {"$project":{"_id" : 0, "__v" : 0, "${subdoc}._id" : 0}},
               {"$sort":{"${subdoc}.timestamp" : 1}}              
             ]`
         ];
@@ -155,8 +180,8 @@ const getCurrentData = function (deviceID) {
   };
 
 
-  if (identifier.includes('-')) {
-    var identifierSplits = identifier.split('-');
+  if (identifier.includes('|')) {
+    var identifierSplits = identifier.split('|');
     identifier = identifierSplits[0];
     var deviceNumber = identifierSplits[1];
   };
@@ -170,8 +195,10 @@ const getCurrentData = function (deviceID) {
         deviceNumber = parseInt(deviceNumber, 10);
         var agg = [
           `[
-            {"$match": { "$and": [{ "deviceNumber" : ${deviceNumber} },{ "${subdoc}": { "$exists": 1 } } ] }},
             {"$sort":{"${subdoc}.timestamp" : 1}},
+            {"$limit : 4000},
+            {"$match": { "$and": [{ "deviceNumber" : ${deviceNumber} },{ "${subdoc}": { "$exists": 1 } } ] }},            
+            {"$project":{"_id" : 0, "__v" : 0, "${subdoc}._id" : 0}},
             {"$limit" : 1}
           ]`
         ];
@@ -213,8 +240,12 @@ const getCurrentData = function (deviceID) {
             fields.forEach(x => {
               if (x === "deviceNumber") { }
               else {
-                var timestamp = data[0][x]["timestamp"];
-                data[0][x]["timestamp"] = new Date(timestamp);
+                try {
+                  var timestamp = data[0][x]["timestamp"];
+                  data[0][x]["timestamp"] = new Date(timestamp);
+                } catch (error) {
+                  console.log(error);
+                }
               }
             })
             resolve(data);
@@ -236,7 +267,8 @@ function historicAggBuilder(data, startDate, endDate) {
     if (x === "deviceNumber") { }
     else {
       agg += `"${x}" : [`
-      agg += `{ "$match": { "$and": [ { "${x}" : {"$exists" : 1}},{"${x}.timestamp" : { "$gt" : ${startDate}, "$lt" : ${endDate} } } ] } }`
+      agg += `{ "$match": { "$and": [ { "${x}" : {"$exists" : 1}},{"${x}.timestamp" : { "$gt" : ${startDate}, "$lt" : ${endDate} } } ] } },`
+      agg += `{ "$project": { "_id": 0, "__v": 0, "${x}._id" : 0} }`
       agg += `],`
     }
   });
@@ -246,7 +278,7 @@ function historicAggBuilder(data, startDate, endDate) {
   agg += `]`
   agg += `}}`
   agg += `]`
-  console.log(agg);
+  
   agg = JSON.parse(agg);
 
   return agg;
@@ -256,15 +288,16 @@ function historicAggBuilder(data, startDate, endDate) {
 function aggBuilder(data) {
 
   var agg = `[`
-  agg += `{"$sort" : {"timestamp" : -1}},`
-  agg += `{ "$limit" : 500 },`
+  agg += `{"$sort" : {"timestamp" : 1}),`
+  agg += `{"$limit" : 4000},`
   agg += `{
   "$facet" : {
     `
   data[0].fields.forEach(x => {
     agg += `"${x}" : [`
-    agg += `{ "$match": { "${x}": { "$exists": 1 } } }, `
-    agg += `{ "$sort": { "${x}.timestamp": 1 } }, `
+    agg += `{ "$match": { "${x}": { "$exists": 1 } } },`
+    agg += `{ "$sort": { "${x}.timestamp": 1 } },`
+    agg += `{ "$project": { "_id": 0, "__v": 0, "${x}._id" : 0 } },`
     agg += `{ "$group": {`
     agg += `"_id": null,`
     agg += `"lastItem": { "$last": "$$ROOT" }`
@@ -303,8 +336,6 @@ function aggBuilder(data) {
 
   agg += `}}`
   agg += `]`
-
-  console.log(agg);
 
   agg = JSON.parse(agg);
   return agg;

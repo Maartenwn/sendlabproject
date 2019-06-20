@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-const SendLabWarmtepompBinntenTemperatuur1 = new mongoose.Schema({
+const insideTemperature = new mongoose.Schema({
     timestamp: {
         type: Date,
         required: true,
@@ -34,7 +34,7 @@ const SendLabWarmtepompBinntenTemperatuur2 = new mongoose.Schema({
     }
 })
 
-const energieMeter = new mongoose.Schema({
+const energyMeter = new mongoose.Schema({
     timestamp: {
         type: Number,
         required: true,
@@ -196,7 +196,7 @@ const energieMeter = new mongoose.Schema({
     }
 })
 
-const Warmtemeter = new mongoose.Schema({
+const heatPump = new mongoose.Schema({
     timestamp: {
         type: Number,
         required: true,
@@ -434,7 +434,7 @@ const warmtePompSchema = new mongoose.Schema({
     },
 
     SendLabWarmtepompBinntenTemperatuur1: {
-        type: SendLabWarmtepompBinntenTemperatuur1,
+        type: insideTemperature,
         default: undefined,
     },
 
@@ -444,12 +444,12 @@ const warmtePompSchema = new mongoose.Schema({
     },
 
     energyMeter: {
-        type: energieMeter,
+        type: energyMeter,
         default: undefined,
     },
 
-    Warmtemeter: {
-        type: Warmtemeter,
+    heatPump: {
+        type: heatPump,
         default: undefined,
     }
 })

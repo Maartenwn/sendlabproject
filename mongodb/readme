@@ -1,0 +1,3 @@
+- autostart.sh startups script voor mongo docker
+- Dockerfile dockerfile voor mongo docker
+- mongodb.conf config file voor mongodb demoan op mongo docker

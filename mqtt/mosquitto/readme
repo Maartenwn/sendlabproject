@@ -1,0 +1,4 @@
+- ca_certifiaces: folder met de certificates van de certificate authority
+- certs: folder met de certificate van de mosquitto server
+- conf.d : lege server eventueel voor extra aanpassingen mosquitto
+- acl : file met permissions van identifiers voor de mqtt brokers
