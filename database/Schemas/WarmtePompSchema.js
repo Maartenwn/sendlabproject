@@ -34,10 +34,15 @@ const SendLabWarmtepompBinntenTemperatuur2 = new mongoose.Schema({
     }
 })
 
-const SendLabWarmtePompEnergieMeter = new mongoose.Schema({
+const energieMeter = new mongoose.Schema({
     timestamp: {
         type: Number,
         required: true,
+    },
+
+    DSRMVersion: {
+        type: Number,
+        required: true
     },
 
     MeterTimeStamp: {
@@ -160,32 +165,32 @@ const SendLabWarmtePompEnergieMeter = new mongoose.Schema({
         required: true,
     },
 
-    HuidigVerbruikFase1: {
+    L1ActivePowerUse: {
         type: Number,
         required: true,
     },
 
-    HuidigVerbruikFase2: {
+    L2ActivePowerUse: {
         type: Number,
         required: true,
     },
 
-    HuidigVerbruikFase3: {
+    L3ActivePowerUse: {
         type: Number,
         required: true,
     },
 
-    HuidigOpleveringFase1: {
+    L1ActivePowerReturned: {
         type: Number,
         required: true,
     },
 
-    HuidigOpleveringFase2: {
+    L2ActivePowerReturned: {
         type: Number,
         required: true,
     },
 
-    HuidigOpleveringFase3: {
+    L3ActivePowerReturned: {
         type: Number,
         required: true,
     }
@@ -283,11 +288,14 @@ const Warmtemeter = new mongoose.Schema({
  *                  temperatureValue:
  *                      type: Number
  *                      description: "De gemeten temperatuur in °C"
- *          SendLabWarmtePompEnergiemeter:
+ *          energiemeter:
  *              properties:
  *                  timestamp:
  *                      description: "The time when the data was measured"
  *                      type: String
+ *                  DSRMVersion:
+ *                      type: Number
+ *                      description: "The version of the DSRM"
  *                  MeterTimeStamp:
  *                      type: String
  *                      description: "De timestamp van de meter"
@@ -360,22 +368,22 @@ const Warmtemeter = new mongoose.Schema({
  *                  L3InstantaneousCurrent:
  *                      type: Number
  *                      description: ""
- *                  HuidigVerbruikFase1:
+ *                  L1ActivePowerUse:
  *                      type: Number
  *                      description: "Het verbuik in fase 1 in kW"
- *                  HuidigVerbruikFase2:
+ *                  L2ActivePowerUse:
  *                      type: Number
  *                      description: "Het verbuik in fase 2 in kW"
- *                  HuidigVerbruikFase3:
+ *                  L3ActivePowerUse:
  *                      type: Number
  *                      description: "Het verbuik in fase 3 in kW"
- *                  HuidigOpleveringFase1:
+ *                  L1ActivePowerReturned:
  *                      type: Number
  *                      description: "De oplevering in fase 1 in kW"
- *                  HuidigOpleveringFase2:
+ *                  L2ActivePowerReturned:
  *                      type: Number
  *                      description: "De oplevering in fase 2 in kW"
- *                  HuidigOpleveringFase3:
+ *                  L3ActivePowerReturned:
  *                      type: Number
  *                      description: "De oplevering in fase 3 in kW"
  *          Warmtemeter:
@@ -435,8 +443,8 @@ const warmtePompSchema = new mongoose.Schema({
         default: undefined,
     },
 
-    SendLabWarmtePompEnergieMeter: {
-        type: SendLabWarmtePompEnergieMeter,
+    energyMeter: {
+        type: energieMeter,
         default: undefined,
     },
 

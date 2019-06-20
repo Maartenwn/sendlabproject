@@ -1,5 +1,18 @@
 const express = require("express");
 const router = express.Router();
+const database = require('../../database/api');
+
+async function returnInfo(deviceId,res,mode,start,end) {
+    await database.getHistoricData(deviceId,start,end).then(result => {
+        res.status(200).json({
+            result
+        })
+    }).catch(error =>{
+        res.status(500).json({
+            error
+        })
+    });    
+}
 
 router.get('/device/:deviceID/data/:mode',(req,res) => {
     let mode = req.params.mode
@@ -12,13 +25,7 @@ router.get('/device/:deviceID/data/:mode',(req,res) => {
         let isStartValid = (new Date(start)).getTime() > 0;
         let isEndValid = (new Date(end)).getTime() > 0;
         if(isStartValid && isEndValid){
-            res.status(200).json({
-                test: mode,
-                deviceID: deviceID,
-                start: start,
-                end : end,
-                interval: interval,
-            })
+            returnInfo(deviceID,res,mode,start,end);  //todo implement interval
         }else res.status(417).send("Niet voldaan aan verwachting")
     }else res.status(404).send();
 })  

@@ -404,7 +404,7 @@ const mppt1 = new mongoose.Schema({
         required: true
     },
 
-    bvir: {
+    bvlr: {
         type: Boolean,
         required: true
     },
@@ -441,7 +441,7 @@ const mppt2 = new mongoose.Schema({
         required: true
     },
 
-    bvir: {
+    bvlr: {
         type: Boolean,
         required: true
     },
@@ -478,7 +478,7 @@ const mppt3 = new mongoose.Schema({
         required: true
     },
 
-    bvir: {
+    bvlr: {
         type: Boolean,
         required: true
     },
@@ -515,7 +515,7 @@ const mppt4 = new mongoose.Schema({
         required: true
     },
 
-    bvir: {
+    bvlr: {
         type: Boolean,
         required: true
     },
