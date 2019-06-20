@@ -1,6 +1,6 @@
 # sendlabproject
 
-##files
+## Files
 - docker-compose.yml docker-compose file voor docker-compose
 - upload-cloud.sh upload script om files te uploaden naar de TI-Cloud server 
 - upload-cloud-test.sh upload script om files uploaden naar de TI-Cloud-Test server
@@ -8,16 +8,16 @@
 - Dockerfile docker file behoordende tot de node docker
 - Startup.txt file met instructies om docker omgeving op te zetten
 
-##docker folders
+## Docker folders
 - mqtt: folder met alle files voor mqtt docker
 - mongo: folder met alle files voor mongo docker
 - visualisatie: folder met alle files voor visualisatie dockers
 - node folder met alle files voor instellen van node applicaties (ip en port) en startup script node docker
 
-##documentatie
+## Documentatie
 - api-documentatie folder met documentatie van dit project
 
-##applicaties
+## Applicaties
 - database folder met database code
 - oath folder met code voor oath node applicatie
 - database-link folder met code voor database-link node applicatie (haalt data op van mqtt en zet het in de database)
@@ -28,9 +28,12 @@
 - event-logger folder met code voor de event-logger electron-js applicatie (laat de gegenereerde events zien in een lijst)
 
 
-###poorten
+### Poorten
 - 4200: Visualisatie zonneboot
 - 23450: REST-Full
 - 34219: oath
 - 8080: websocket zonneboot
 - 8883: mqtt / mosquitto 
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
