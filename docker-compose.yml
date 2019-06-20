@@ -1,9 +1,18 @@
 version: '3'
+
+networks:
+  backend:
+    ipam:
+      config:
+        - subnet: 172.18.0.0/24
 services:
   mqtt:
     build: ./mqtt
     image: sendlab-mqtt/ubuntu
     container_name: sendlab-mqtt-ubuntu
+    networks: 
+      backend:
+        ipv4_address: 172.18.0.3
     ports:
      - "8883:8883"
     volumes:
@@ -18,14 +27,21 @@ services:
      - "23450:23450"
      - "34219:34219"
      - "8080:8080"
+    networks: 
+      backend:
+        ipv4_address: 172.18.0.4
     volumes:
      - /var/log/pm2:/root/.pm2/logs:rw
+     - /home/maurice/oauth/db:/root/oauth/db:rw
     tty: true
     stdin_open: true
   mongo:
     build: ./mongodb
     image: sendlab-mongo/ubuntu
     container_name: sendlab-mongo-ubuntu
+    networks: 
+      backend:
+        ipv4_address: 172.18.0.2
     volumes:
      - /var/log/mongodb:/var/log/mongodb:rw
      - /data:/data
@@ -35,6 +51,9 @@ services:
     build: ./visualisatie/zonneboot
     image: sendlab-vis-zonneboot/ubuntu
     container_name: sendlab-vis-zonneboot-ubuntu
+    networks: 
+      backend:
+        ipv4_address: 172.18.0.11
     ports:
      - "4200:80"
     tty: true
