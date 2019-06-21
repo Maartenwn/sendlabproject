@@ -1,7 +1,7 @@
 const mqtt = require('mqtt');
 const fs = require('fs');
 const config = require('../node/config.js');
-//const database = require("./../database/api.js");
+const database = require("./../database/api.js");
 
 var KEY = fs.readFileSync("./certs/client.key");
 var CRT = fs.readFileSync("./certs/client.crt");
@@ -58,7 +58,7 @@ client.on('message', function (topic, message) {
 						data.timestamp = new Date(object.timestamp);
 						send.data = data;
 						//console.log(send);
-						//database.saveData(send);
+						database.saveData(send);
 					});
 				});
 			}else {
@@ -73,7 +73,7 @@ client.on('message', function (topic, message) {
 				send.data = object.data;
 				send.timestamp = new Date(object.timestamp);
 				//console.log(send);
-				//database.saveData(send);
+				database.saveData(send);
 			}
 		}else console.error(topic +  "tried to push wrong data with identiefier");
     } catch (error) {	
