@@ -49,15 +49,15 @@ app.all("*", function (req, res, next) {
     next();
 });
 
-var httpsServer = https.createServer(credentials, app);
-httpsServer.listen(port);
+//var httpsServer = https.createServer(credentials, app);
+//httpsServer.listen(port);
 
-//app.listen(port, '0.0.0.0', function () {
-//  console.log("server started at http://localhost:".concat(port));
-//  setInterval(function () {
-//    console.log(sessions.size);
-//  }, 5000);
-//});
+app.listen(port, '0.0.0.0', function () {
+  console.log("server started at http://localhost:".concat(port));
+  setInterval(function () {
+    console.log(sessions.size);
+    }, 5000);
+});
 
 function hash(password, salt) {
     var hash = crypto.createHmac('sha512', salt);
@@ -157,10 +157,10 @@ app.post("/refresh", function (request, response) {
     var userName = request.body.userName;
     if (!refreshToken || !userName) return response.status(500).send("nope");
 
-    if (typeof refreshToken === 'string' && typeof userName === 'string' && emailCompair(user.userName, userName)) {
+    if (typeof refreshToken === 'string' && typeof userName === 'string') {
         var invalid = true;
         var guid = null;
-        user.sessions.forEach(function (session, key) {
+        sessions.forEach(function (session, key) {
             if (session.refresh_token === refreshToken) {
                 invalid = false;
                 guid = key;
@@ -168,38 +168,38 @@ app.post("/refresh", function (request, response) {
         });
 
         if (!invalid) {
-            var tokens = createTokens(user.id, user.role);
-            user.sessions.set(guid, {
+            var tokens = createTokens(initialUser.userName);
+            sessions.set(guid, {
                 refresh_token: tokens.refresh_token,
                 selfDestruct: setTimeout(function () {
-                    user.sessions.delete(guid);
+                    sessions.delete(guid);
                 }, RefreshTokenLifeTimeMs)
             });
             response.send(tokens);
-            return user;
+            return;
         }
 
         response.status(500).send("nope");
-        return user;
+        return;
     }
 
     response.status(500).send("nope");
-    return user;
+    return;
 });
-app.post("/validate", function (request, response) {
-    var accessToken = request.body.access_token;
-    if (!accessToken) return response.send("nope");
+// app.post("/validate", function (request, response) {
+//     var accessToken = request.body.access_token;
+//     if (!accessToken) return response.send("nope");
 
-    try {
-        jwt.verify(accessToken, private_key, {
-            algorithm: "HS512",
-            expiresIn: '600s'
-        });
-        response.send("good job");
-    } catch (error) {
-        response.send("nope");
-    }
-});
+//     try {
+//         jwt.verify(accessToken, private_key, {
+//             algorithm: "HS512",
+//             expiresIn: '600s'
+//         });
+//         response.send("good job");
+//     } catch (error) {
+//         response.send("nope");
+//     }
+// });
 
 function emailCompair(email1, email2) {
     var e1 = email1.trim();
