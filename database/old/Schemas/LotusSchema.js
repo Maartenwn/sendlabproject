@@ -199,11 +199,6 @@ var mongoose = require('mongoose');
  */
 
 const lotusSchema = new mongoose.Schema({
-    deviceNumber : {
-        type : Number,
-        required: true,
-    },
-    
     timestamp: {
         type: Number,
         required: true,
