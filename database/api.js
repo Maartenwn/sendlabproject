@@ -40,8 +40,8 @@ console.log(mongoose.connection.readyState);
 
 const saveData = function (data) {
   var identifier = data.identifier;
-  if (identifier.includes('|')) {
-    var identifierSplits = identifier.split('|');
+  if (identifier.includes('-')) {
+    var identifierSplits = identifier.split('-');
     identifier = identifierSplits[0];
     var deviceNumber = identifierSplits[1];
   }
