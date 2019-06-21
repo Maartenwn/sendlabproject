@@ -428,6 +428,11 @@ const heatPump = new mongoose.Schema({
  */
 
 const warmtePompSchema = new mongoose.Schema({
+    deviceNumber : {
+        type : Number,
+        required: true,
+    },
+    
     timestamp: {
         type: Number,
         required: true,

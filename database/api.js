@@ -40,8 +40,8 @@ console.log(mongoose.connection.readyState);
 
 const saveData = function (data) {
   var identifier = data.identifier;
-  if (identifier.includes('|')) {
-    var identifierSplits = identifier.split('|');
+  if (identifier.includes('-')) {
+    var identifierSplits = identifier.split('-');
     identifier = identifierSplits[0];
     var deviceNumber = identifierSplits[1];
   }
@@ -61,28 +61,7 @@ const saveData = function (data) {
   }
 }
 
-var devicesInDB = [];
-
-
-function saveDeviceInDatabase(identifier, deviceNumber) {
-  var model = mongoose.model('Device', deviceSchema.Devices);
-  var query = model.find({}, { '_id': 0, '__v': 0 });
-  query.then(data => {
-
-    console.log(devicesInDB)
-    var saveData = { "deviceName": identifier, "deviceNumber": deviceNumber }
-    if (devicesInDB.some(x => x.deviceName === identifier && x.deviceNumber === parseInt(deviceNumber, 10))) { console.log("found") }
-    else {
-      devicesInDB.push(saveData);
-      new model(saveData).save();
-    }
-  })
-}
-
-const getDevices = function () {
-  return devicesInDB;
-}
-
+//Gets all the data between 2 time points.
 const getHistoricData = function (deviceID, beginDate, endDate) {
   var identifier = deviceID;
 
@@ -90,17 +69,13 @@ const getHistoricData = function (deviceID, beginDate, endDate) {
   parsedBeginDate = new Date(beginDate).getTime();
   parsedEndDate = new Date(endDate).getTime();
 
-  if (deviceID.includes('/')) {
-    var splits = identifier.split('/');
+  if (deviceID.includes('|')) {
+    var splits = identifier.split('|');
     identifier = splits[0];
-    var subdoc = splits[1];
-  };
-
-
-  if (identifier.includes('|')) {
-    var identifierSplits = identifier.split('|');
-    identifier = identifierSplits[0];
-    var deviceNumber = identifierSplits[1];
+    var deviceNumber = splits[1];
+    if (splits.length === 3) {
+      var subdoc = splits[2]
+    }
   };
 
   var model = schemas[identifier]
@@ -127,63 +102,36 @@ const getHistoricData = function (deviceID, beginDate, endDate) {
         });
       }
       else {
-        model.aggregate([
-          { "$project": { "arrayofkeyvalue": { "$objectToArray": "$$ROOT" } } },
-          { "$unwind": "$arrayofkeyvalue" },
-          { "$group": { "_id": null, "allkeys": { "$addToSet": "$arrayofkeyvalue.k" } } },
-          {
-            "$project": {
-              "fields": {
-                "$filter": {
-                  input: "$allkeys",
-                  as: "num",
-                  cond: {
-                    $and: [
-                      { "$ne": ["$$num", "__v"] },
-                      { "$ne": ["$$num", "_id"] },
-                      { "$ne": ["$$num", "timestamp"] }
-                    ]
-                  }
-                }
-              }
+        fields = Object.keys(model.schema.tree);
+        var agg = historicAggBuilder(fields, beginDate, endDate);
+        model.aggregate(agg).allowDiskUse(true).then((data) => {
+          fields.forEach(x => {
+            if ((["deviceNumber", "timestamp", "_id", "__v", "id"]).indexOf(x) >= 0) { }
+            else {
+              data[0][x].forEach(y => {
+                var timestamp = y[x]["timestamp"];
+                y[x]["timestamp"] = new Date(timestamp);
+              });
             }
-          }
-        ]).then((data) => {
-          var agg = historicAggBuilder(data, beginDate, endDate);
-          var fields = data[0].fields;
-          model.aggregate(agg).allowDiskUse(true).then((data) => {
-            fields.forEach(x => {
-              if (x === "deviceNumber") { }
-              else {
-                data[0][x].forEach(y => {
-                  var timestamp = y[x]["timestamp"];
-                  y[x]["timestamp"] = new Date(timestamp);
-                });
-              }
-            })
-            resolve(data)
-          });
+          })
+          resolve(data)
         });
       }
     } else resolve(reject);
   });
 }
 
-
+// Gets the latest record from every single field in the collection.
 const getCurrentData = function (deviceID) {
   var identifier = deviceID;
 
-  if (deviceID.includes('/')) {
-    var splits = identifier.split('/');
+  if (deviceID.includes('|')) {
+    var splits = identifier.split('|');
     identifier = splits[0];
-    var subdoc = splits[1];
-  };
-
-
-  if (identifier.includes('|')) {
-    var identifierSplits = identifier.split('|');
-    identifier = identifierSplits[0];
-    var deviceNumber = identifierSplits[1];
+    var deviceNumber = splits[1];
+    if (splits.length === 3) {
+      var subdoc = splits[2]
+    }
   };
 
   var model = schemas[identifier]
@@ -194,9 +142,7 @@ const getCurrentData = function (deviceID) {
         //Cant use 001 in json..
         deviceNumber = parseInt(deviceNumber, 10);
         var agg = [
-          `[
-            {"$sort":{"${subdoc}.timestamp" : 1}},
-            {"$limit : 4000},
+          `[           
             {"$match": { "$and": [{ "deviceNumber" : ${deviceNumber} },{ "${subdoc}": { "$exists": 1 } } ] }},            
             {"$project":{"_id" : 0, "__v" : 0, "${subdoc}._id" : 0}},
             {"$limit" : 1}
@@ -212,44 +158,24 @@ const getCurrentData = function (deviceID) {
         });
       }
       else {
-        model.aggregate([
-          { "$project": { "arrayofkeyvalue": { "$objectToArray": "$$ROOT" } } },
-          { "$unwind": "$arrayofkeyvalue" },
-          { "$group": { "_id": null, "allkeys": { "$addToSet": "$arrayofkeyvalue.k" } } },
-          {
-            "$project": {
-              "fields": {
-                "$filter": {
-                  input: "$allkeys",
-                  as: "num",
-                  cond: {
-                    $and: [
-                      { "$ne": ["$$num", "__v"] },
-                      { "$ne": ["$$num", "_id"] },
-                      { "$ne": ["$$num", "timestamp"] }
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        ]).then((data) => {
-          var agg = aggBuilder(data);
-          var fields = data[0].fields;
-          model.aggregate(agg).allowDiskUse(true).then((data) => {
-            fields.forEach(x => {
-              if (x === "deviceNumber") { }
-              else {
-                try {
+        var fields = Object.keys(model.schema.tree);
+        var agg = aggBuilder(fields);
+        model.aggregate(agg).allowDiskUse(true).then((data) => {
+          fields.forEach(x => {
+            if ((["deviceNumber", "timestamp", "_id", "__v", "id"]).indexOf(x) >= 0) { }
+            else {
+              try {
+                if ((data[0][x] === undefined)) { }
+                else {
                   var timestamp = data[0][x]["timestamp"];
                   data[0][x]["timestamp"] = new Date(timestamp);
-                } catch (error) {
-                  console.log(error);
                 }
+              } catch (error) {
+                console.log(error);
               }
-            })
-            resolve(data);
-          });
+            }
+          })
+          resolve(data);
         });
       }
     } else resolve(reject);
@@ -263,8 +189,8 @@ function historicAggBuilder(data, startDate, endDate) {
   endDate = new Date(endDate).getTime();
   var agg = `[`
   agg += `{"$facet" : {`
-  data[0].fields.forEach(x => {
-    if (x === "deviceNumber") { }
+  fields.forEach(x => {
+    if ((["deviceNumber", "timestamp", "_id", "__v", "id"]).indexOf(x) >= 0) { }
     else {
       agg += `"${x}" : [`
       agg += `{ "$match": { "$and": [ { "${x}" : {"$exists" : 1}},{"${x}.timestamp" : { "$gt" : ${startDate}, "$lt" : ${endDate} } } ] } },`
@@ -278,59 +204,77 @@ function historicAggBuilder(data, startDate, endDate) {
   agg += `]`
   agg += `}}`
   agg += `]`
-  
   agg = JSON.parse(agg);
-
   return agg;
 }
 
 // Should be JSON object from start not string parsed to JSON.
 function aggBuilder(data) {
-
   var agg = `[`
-  agg += `{"$sort" : {"timestamp" : 1}),`
-  agg += `{"$limit" : 4000},`
+  // agg += `{"$sort" : {"timestamp" : 1}},`
+  // agg += `{"$limit" : 4000},`
   agg += `{
   "$facet" : {
     `
-  data[0].fields.forEach(x => {
-    agg += `"${x}" : [`
-    agg += `{ "$match": { "${x}": { "$exists": 1 } } },`
-    agg += `{ "$sort": { "${x}.timestamp": 1 } },`
-    agg += `{ "$project": { "_id": 0, "__v": 0, "${x}._id" : 0 } },`
-    agg += `{ "$group": {`
-    agg += `"_id": null,`
-    agg += `"lastItem": { "$last": "$$ROOT" }`
-    agg += `}}, `
-    agg += `{"$project": {`
-    agg += `"_id" : "$lastItem.${x}"`
-    agg += `}}`
-    agg += `],`
+  data.forEach(x => {
+    if ((["deviceNumber", "timestamp", "_id", "__v", "id"]).indexOf(x) >= 0) { }
+    else {
+      agg += `"${x}" : [`
+      agg += `{ "$match": { "${x}": { "$exists": 1 } } },`
+      agg += `{ "$sort": { "${x}.timestamp": 1 } },`
+      agg += `{ "$project": { "_id": 0, "__v": 0, "${x}._id" : 0 } },`
+      agg += `{ "$group": {`
+      agg += `"_id": null,`
+      agg += `"lastItem": { "$last": "$$ROOT" }`
+      agg += `}}, `
+      agg += `{"$project": {`
+      agg += `"_id" : "$lastItem.${x}"`
+      agg += `}}`
+      agg += `],`
+    }
   });
 
   agg = agg.substring(0, agg.length - 1);
 
   agg += `}}, `
   agg += `{"$project" : {`
-  data[0].fields.forEach(x => {
-    agg += `"${x}" : { "$arrayElemAt": ["$${x}", 0] },`
+
+
+  data.forEach(x => {
+    if ((["deviceNumber", "timestamp", "_id", "__v", "id"]).indexOf(x) >= 0) { }
+    else {
+      agg += `"${x}" : { "$arrayElemAt": ["$${x}", 0] },`
+    }
   })
+
 
   agg = agg.substring(0, agg.length - 1);
 
   agg += `}}, `
   agg += `{"$project" : {    `
-  data[0].fields.forEach(x => {
-    agg += `"${x}" : "$${x}._id",`
+
+
+  data.forEach(x => {
+    if ((["deviceNumber", "timestamp", "_id", "__v", "id"]).indexOf(x) >= 0) { }
+    else {
+      agg += `"${x}" : "$${x}._id",`
+    }
   })
+
 
   agg = agg.substring(0, agg.length - 1);
 
   agg += `}}, `
   agg += `{"$project" : {    `
-  data[0].fields.forEach(x => {
-    agg += `"${x}" : { "_id" : 0 },`
+
+
+  data.forEach(x => {
+    if ((["deviceNumber", "timestamp", "_id", "__v", "id"]).indexOf(x) >= 0) { }
+    else {
+      agg += `"${x}" : { "_id" : 0 },`
+    }
   })
+
 
   agg = agg.substring(0, agg.length - 1);
 

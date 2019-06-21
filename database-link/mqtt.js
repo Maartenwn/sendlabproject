@@ -1,7 +1,7 @@
 const mqtt = require('mqtt');
 const fs = require('fs');
 const config = require('../node/config.js');
-const database = require("./../database/api.js");
+//const database = require("./../database/api.js");
 
 var KEY = fs.readFileSync("./certs/client.key");
 var CRT = fs.readFileSync("./certs/client.crt");
@@ -38,43 +38,44 @@ client.on('message', function (topic, message) {
     // message is Buffer
 	try {
 		var object = JSON.parse(message.toString());
-		if(object.buffer != undefined){
+		if(object.identifier.split('-')[0] === topic.split('/')[1]){
+			if(object.buffer != undefined){
+				/*Buffer-modus*/ 
+				var bufferdata = Object.entries(object.data);
+				bufferdata.forEach(buffer => {
+					var idValue = buffer[0]; //key value of attribute
+					//console.log(buffer);
+					buffer[1].forEach(e => { //loop through array
+						//console.log("Identiefier: " + object.identifier + "/" + idValue+  " Timestamp: " + e.timestamp + '\n' + "data: " + JSON.stringify(e));
+						//e.identifier = object.identifier + "/" + idValue;
 
-			/*Buffer-modus*/ 
-			var bufferdata = Object.entries(object.data);
-			bufferdata.forEach(buffer => {
-				var idValue = buffer[0]; //key value of attribute
-				//console.log(buffer);
-				buffer[1].forEach(e => { //loop through array
-					//console.log("Identiefier: " + object.identifier + "/" + idValue+  " Timestamp: " + e.timestamp + '\n' + "data: " + JSON.stringify(e));
-					//e.identifier = object.identifier + "/" + idValue;
+						var send = {};
+						send.identifier = object.identifier;
 
-					var send = {};
-					send.identifier = object.identifier;
-
-					var data = {};
-					data[idValue] = e;
-					data[idValue].timestamp = new Date(e.timestamp);
-					data.timestamp = new Date(object.timestamp);
-					send.data = data;
-					//console.log(send);
-					database.saveData(send);
+						var data = {};
+						data[idValue] = e;
+						data[idValue].timestamp = new Date(e.timestamp);
+						data.timestamp = new Date(object.timestamp);
+						send.data = data;
+						//console.log(send);
+						//database.saveData(send);
+					});
 				});
-			});
-		}else {
-			
-			/*Non-buffer-modus*/
-			//console.log("Identiefier: " + object.identifier +  " Timestamp: " + object.timestamp + '\n' + "data: " + JSON.stringify(object.data));
-			//object.data.identifier = object.identifier;
-			//object.data.timestamp = object.timestamp
+			}else {
+				
+				/*Non-buffer-modus*/
+				//console.log("Identiefier: " + object.identifier +  " Timestamp: " + object.timestamp + '\n' + "data: " + JSON.stringify(object.data));
+				//object.data.identifier = object.identifier;
+				//object.data.timestamp = object.timestamp
 
-			var send = {};
-			send.identifier = object.identifier;
-			send.data = object.data;
-			send.timestamp = new Date(object.timestamp);
-			//console.log(send);
-			database.saveData(send);
-		}
+				var send = {};
+				send.identifier = object.identifier;
+				send.data = object.data;
+				send.timestamp = new Date(object.timestamp);
+				//console.log(send);
+				//database.saveData(send);
+			}
+		}else console.error(topic +  "tried to push wrong data with identiefier");
     } catch (error) {	
         
     }
