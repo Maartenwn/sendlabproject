@@ -16,22 +16,24 @@ export class MotorVerboseComponent implements OnInit {
     bottomLeftGauge: Chart;
     bottomRightGauge: Chart;
 
-    @Input() len: number;
-
     @Input() set data(data: any) {
         if (this.topLeftGauge !== undefined) {
-            this.topLeftGauge.data.datasets[0].data[0] = 2500;
+            //this.topLeftGauge.data.datasets[0].data[0] = data['mtr-speed'].rpm;
+            this.topLeftGauge.data.datasets[0].data[0] = 25000;
             this.topLeftGauge.data.datasets[0].data[1] = 5000 - this.topLeftGauge.data.datasets[0].data[0];
             this.topLeftGauge.options.elements.center.text = this.topLeftGauge.data.datasets[0].data[0];
 
+            // this.topRightGauge.data.datasets[0].data[0] = data['phase']['cur'];
             this.topRightGauge.data.datasets[0].data[0] = 25;
             this.topRightGauge.data.datasets[0].data[1] = 50 - this.topRightGauge.data.datasets[0].data[0];
             this.topRightGauge.options.elements.center.text = this.topRightGauge.data.datasets[0].data[0] + 'A';
 
-            this.bottomLeftGauge.data.datasets[0].data[0] = 33;
+            // this.bottomLeftGauge.data.datasets[0].data[0] = data['mtr-verbose']['mtr-t'];
+            this.bottomLeftGauge.data.datasets[0].data[0] = 75;
             this.bottomLeftGauge.data.datasets[0].data[1] = 100 - this.bottomLeftGauge.data.datasets[0].data[0];
             this.bottomLeftGauge.options.elements.center.text = this.bottomLeftGauge.data.datasets[0].data[0] + '°C';
 
+            // this.bottomRightGauge.data.datasets[0].data[0] = data['mtr-verbose']['pcb-t'];
             this.bottomRightGauge.data.datasets[0].data[0] = 33;
             this.bottomRightGauge.data.datasets[0].data[1] = 100 - this.bottomRightGauge.data.datasets[0].data[0];
             this.bottomRightGauge.options.elements.center.text = this.bottomRightGauge.data.datasets[0].data[0] + '°C';
@@ -83,7 +85,6 @@ export class MotorVerboseComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.log('hoi');
         // Chart.defaults.RoundedDoughnut = Chart.helpers.clone(Chart.defaults.doughnut);
         // Chart.controllers.RoundedDoughnut = Chart.controllers.doughnut.extend({
         //     draw(ease) {

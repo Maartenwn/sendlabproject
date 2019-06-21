@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, HostListener, EventEmitter} from '@angular/core';
-import {DataService} from '../services/data.service';
+import {DataListener, DataService} from '../services/data.service';
 
 @Component({
     selector: 'app-grid',
@@ -7,12 +7,7 @@ import {DataService} from '../services/data.service';
     styleUrls: ['./grid.component.css']
 })
 
-export class GridComponent implements OnInit {
-    _username: string = '';
-    _password: string = '';
-    _authorizationToken: string;
-    _refreshToken: string;
-
+export class GridComponent implements OnInit, DataListener {
     components: Component[];
     movable: boolean;
 
@@ -25,13 +20,11 @@ export class GridComponent implements OnInit {
     @HostListener('document:keydown.control', ['$event'])
     handleKeyboardDownEvent(event: KeyboardEvent) {
         this.movable = true;
-        console.log('down');
     }
 
     @HostListener('document:keyup.control', ['$event'])
     handleKeyboardUpEvent(event: KeyboardEvent) {
         this.movable = false;
-        console.log('up');
     }
 
     onWidgetChange(value: any) {
@@ -42,38 +35,12 @@ export class GridComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.dataService.Login(this._username, this._password).subscribe((loginData) => {
-            this._authorizationToken = loginData.access_token;
-            this._refreshToken = loginData.refresh_token;
-            console.log(loginData);
-
-            if (this._authorizationToken !== undefined) {
-                this.dataService.getCurrentData(this._authorizationToken).subscribe(
-                    data => {
-                        this.inputs.data = data;
-                    }, // success path
-                    _ => {
-                        this.dataService.Refresh(this._username, this._refreshToken).subscribe(refreshData => {
-                            this._authorizationToken = refreshData;
-                            this._refreshToken = refreshData;
-                        });
-                    }, // error path
-                );
-                setInterval(() => {
-                    this.dataService.getCurrentData(this._authorizationToken).subscribe(
-                        data => {
-                            this.inputs.data = data;
-                        }, // success path
-                        _ => {
-                            this.dataService.Refresh(this._username, this._refreshToken).subscribe(refreshData => {
-                                this._authorizationToken = refreshData;
-                                this._refreshToken = refreshData;
-                            });
-                        }, // error path
-                    );
-                }, 10000);
-            }
-        });
+        // this.dataService.getCurrentData().subscribe(
+        //     data => {
+        //         this.inputs.data = data.result[0];
+        //         console.log(this.inputs.data);
+        //     }
+        // );
     }
 
     inputs = {
@@ -115,4 +82,9 @@ export class GridComponent implements OnInit {
                 {top: 2, left: 1, height: 1, width: 1, color: 'rgb(198,0,180)'},
                 {top: 2, left: 3, height: 1, width: 1, color: 'rgb(140,198,0)'}],
         }];
+
+    onData(data) {
+        // console.log(data);
+        // this.inputs.data = data.result[0];
+    }
 }

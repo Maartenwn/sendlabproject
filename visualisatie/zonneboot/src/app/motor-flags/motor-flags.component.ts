@@ -27,10 +27,19 @@ export class MotorFlagsComponent implements OnInit {
     underVoltageCheck = true;
     GPSFixCheck = false;
 
-
     itemHeight: string;
 
     @Input() set data(data: any) {
+        if(data !== null) {
+            this.motorDirectionCheck = data['steer']['dir'];
+            this.motorEnableCheck = data['mtr-state']['enable'];
+            this.motorReadyCheck = data['mtr-state']['ready'];
+            this.failSafeCheck = data['mtr-flags']['fs'];
+            this.timeOutCheck = data['mtr-flags']['to'];
+            this.overVoltageCheck = data['mtr-flags']['ov'];
+            this.underVoltageCheck = data['mtr-flags']['uv'];
+            this.GPSFixCheck = !!data['gps-info']['fix'];
+        }
     }
 
     constructor() {

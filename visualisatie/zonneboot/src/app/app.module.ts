@@ -30,6 +30,7 @@ import {HttpClientModule} from '@angular/common/http';
         MotorVerboseComponent,
         BatteryComponent,
         SolarPanelComponent,
+        BatteryComponent
     ],
     imports: [
         HttpClientModule,

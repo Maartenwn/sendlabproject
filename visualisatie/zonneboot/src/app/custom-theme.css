@@ -12,7 +12,7 @@
   font-weight: 600;
   font-size: 12px;
   font-family: Roboto, "Helvetica Neue", sans-serif; }
-
+.mat-toolbar
 .mat-badge-small .mat-badge-content {
   font-size: 6px; }
 
@@ -1127,7 +1127,7 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
   border-top-color: rgba(0, 0, 0, 0.54); }
 
 .mat-datepicker-toggle{
-  color: rgba(0, 0, 0, 0.87); }
+  color: white }
 
 .mat-datepicker-content .mat-calendar-next-button,
 .mat-datepicker-content .mat-calendar-previous-button{
@@ -1882,7 +1882,7 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
 
 .mat-toolbar {
   background: #c6002a;
-  color: rgba(0, 0, 0, 0.87); }
+  color: white }
   .mat-toolbar.mat-primary {
     background: white;
     color: white; }
