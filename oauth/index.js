@@ -49,15 +49,15 @@ app.all("*", function (req, res, next) {
     next();
 });
 
-//var httpsServer = https.createServer(credentials, app);
-//httpsServer.listen(port);
+var httpsServer = https.createServer(credentials, app);
+httpsServer.listen(port);
 
-app.listen(port, '0.0.0.0', function () {
-  console.log("server started at http://localhost:".concat(port));
-  setInterval(function () {
-    console.log(sessions.size);
-    }, 5000);
-});
+//app.listen(port, '0.0.0.0', function () {
+//  console.log("server started at http://localhost:".concat(port));
+//  setInterval(function () {
+//    console.log(sessions.size);
+//    }, 5000);
+//});
 
 function hash(password, salt) {
     var hash = crypto.createHmac('sha512', salt);
