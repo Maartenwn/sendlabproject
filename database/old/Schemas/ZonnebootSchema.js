@@ -597,11 +597,6 @@ const gpsInfo = new mongoose.Schema({
 
 
 const zonnebootSchema = new mongoose.Schema({
-    deviceNumber : {
-        type : Number,
-        required: true,
-    },
-    
     timestamp: {
         type: Number,
         required: true

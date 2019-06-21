@@ -62,11 +62,6 @@ var mongoose = require('mongoose')
  *  
  */
 const AvansTIWeerstation = new mongoose.Schema({
-    deviceNumber : {
-        type : Number,
-        required: true,
-    },
-    
     StationID: {
         type: String,
         required: true,
