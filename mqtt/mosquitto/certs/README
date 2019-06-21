@@ -1,3 +1,4 @@
-Place your SSL/TLS server keys and certificates in this directory.
-
-This directory should only be readable by the mosquitto user.
+- server : folder met de certificates voor de mosquitto broker
+- addCert.sh : scriptje waarin je de server certificate toevoegd voor de broker gebaseerd op domein.
+- addServerCertBasedOnIP.sh : scriptje waarin je de server certificate toevoegd voor de broker gebaseerd op IP.
+- crl : folder met daarin crl niet helemaal toegepast

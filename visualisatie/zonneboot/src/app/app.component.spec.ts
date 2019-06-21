@@ -16,16 +16,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'DragnDrop'`, () => {
+  it(`should have as title 'frontend-zonneboot'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('DragnDrop');
+    expect(app.title).toEqual('frontend-zonneboot');
   });
 
   it('should render title in a h1 tag', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to DragnDrop!');
+    expect(compiled.querySelector('h1').textContent).toContain('Welcome to frontend-zonneboot!');
   });
 });

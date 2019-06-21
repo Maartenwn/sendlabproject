@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "DragnDrop": {
+    "frontend-zonneboot": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -58,18 +58,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "DragnDrop:build"
+            "browserTarget": "frontend-zonneboot:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "DragnDrop:build:production"
+              "browserTarget": "frontend-zonneboot:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "DragnDrop:build"
+            "browserTarget": "frontend-zonneboot:build"
           }
         },
         "test": {
@@ -103,7 +103,7 @@
         }
       }
     },
-    "DragnDrop-e2e": {
+    "frontend-zonneboot-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "prefix": "",
@@ -112,11 +112,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "DragnDrop:serve"
+            "devServerTarget": "frontend-zonneboot:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "DragnDrop:serve:production"
+              "devServerTarget": "frontend-zonneboot:serve:production"
             }
           }
         },
@@ -132,5 +132,5 @@
       }
     }
   },
-  "defaultProject": "DragnDrop"
+  "defaultProject": "frontend-zonneboot"
 }

@@ -11,8 +11,13 @@ export class BatteryComponent implements OnInit {
     barData = [3540, 2497, 4201, 3401, 2895, 5312, 4213, 1983, 3598, 2478, 5871, 2357];
 
     @Input() set data(data: any) {
-        if (this.barChart !== undefined) {
-            this.barData = [3540, 2497, 4201, 3401, 2895, 5312, 4213, 1983, 3598, 2478, 5871, 2357];
+        if (data !== null) {
+            this.barData = [];
+            for (let i = 0; i < 12; i++) {
+                this.barData.push(data[`bms-${i}`].vol)
+            }
+            this.barChart.data.datasets[0].data = this.barData;
+            this.barChart.update();
         }
     }
 
@@ -56,5 +61,21 @@ export class BatteryComponent implements OnInit {
                 },
             }
         });
+    }
+
+    addData(chart, label, data) {
+        chart.data.labels.push(label);
+        chart.data.datasets.forEach((dataset) => {
+            dataset.data.push(data);
+        });
+        chart.update();
+    }
+
+    removeData(chart) {
+        chart.data.labels.pop();
+        chart.data.datasets.forEach((dataset) => {
+            dataset.data.pop();
+        });
+        chart.update();
     }
 }

@@ -9,7 +9,8 @@ var zonnebootSchema = require('./Schemas/ZonnebootSchema');
 var testSchema = require('./Schemas/TestSchema');
 var lotusSchema = require('./Schemas/LotusSchema');
 var warmptePompSchema = require('./Schemas/WarmtePompSchema');
-var weerStationSchema = require('./Schemas/WeerstationSchema')
+var weerStationSchema = require('./Schemas/WeerstationSchema');
+var deviceSchema = require('./Schemas/DevicesSchema');
 
 const swaggerOptions = {
   swaggerDefinition: {
@@ -23,88 +24,67 @@ const swaggerOptions = {
 };
 
 const schemas = {
-  'Zonneboot': mongoose.model('Zonneboot', zonnebootSchema.Zonneboot),
-  'Test_device': mongoose.model('Test_device', testSchema.TestData),
-  'Lotus': mongoose.model('Lotus', lotusSchema.Lotus),
-  'Warmtepomp': mongoose.model('Warmtepomp', warmptePompSchema.WarmtePomp),
-  'Weerstation': mongoose.model('Weerstation', weerStationSchema.Weerstation)
+  'zonneboot': mongoose.model('zonneboot', zonnebootSchema.Zonneboot),
+  'test_device': mongoose.model('test_device', testSchema.TestData),
+  'lotus': mongoose.model('lotus', lotusSchema.Lotus),
+  'warmtepomp': mongoose.model('warmtepomp', warmptePompSchema.WarmtePomp),
+  'weerstation': mongoose.model('weerstation', weerStationSchema.Weerstation)
 }
 
 const specs = swaggerJsdoc(swaggerOptions);
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
-
-const options = {
-  allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "X-Access-Token"],
-  credentials: true,
-  methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
-  origin: "*",
-  preflightContinue: false
-};
-
-
-app.use(cors(options));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.connect('mongodb://172.18.0.2:27017/sendlab', { useNewUrlParser: true });
 console.log(mongoose.connection.readyState);
 
-var zonnebootModel = mongoose.model('Zonneboot', zonnebootSchema.Zonneboot);
-
-/**
- * @swagger
- * /:
- *    get:
- *      summary: Test Endpoint
- *      description: This should return hello world
- *      produces: 
- *        - application/json
- *      responses:
- *        200:
- *         summary: Ok 
- */
-app.get('/', (req, res) => {
-  res.send('Hello World');
-});
-
-app.post('/zonneboot', (req, res) => {
-  var data = new zonnebootModel(req.body);
-  console.log(data);
-  data.save();
-  res.status(200).json(data);
-  console.log("Saved");
-})
 
 const saveData = function (data) {
   var identifier = data.identifier;
-  if (identifier.includes('-')) {
-    var identifierSplits = identifier.split('-');
+  if (identifier.includes('|')) {
+    var identifierSplits = identifier.split('|');
     identifier = identifierSplits[0];
     var deviceNumber = identifierSplits[1];
   }
 
   data.data["deviceNumber"] = deviceNumber;
 
-
   var model = schemas[identifier];
   if (!(model === undefined)) {
     var data = new model(data.data);
     data.save((err, data) => {
       if (err) {
-        console.log(err.message);
+        return err.message;
       }
     });
   } else {
-    console.log({ "Error": "Schema not found" });
+    return ({ "Error": "Schema not found : " + data.identifier });
   }
+}
+
+var devicesInDB = [];
+
+
+function saveDeviceInDatabase(identifier, deviceNumber) {
+  var model = mongoose.model('Device', deviceSchema.Devices);
+  var query = model.find({}, { '_id': 0, '__v': 0 });
+  query.then(data => {
+
+    console.log(devicesInDB)
+    var saveData = { "deviceName": identifier, "deviceNumber": deviceNumber }
+    if (devicesInDB.some(x => x.deviceName === identifier && x.deviceNumber === parseInt(deviceNumber, 10))) { console.log("found") }
+    else {
+      devicesInDB.push(saveData);
+      new model(saveData).save();
+    }
+  })
+}
+
+const getDevices = function () {
+  return devicesInDB;
 }
 
 const getHistoricData = function (deviceID, beginDate, endDate) {
   var identifier = deviceID;
-
-  console.log(new Date(beginDate));
-  console.log(new Date(endDate));
 
   //Numbers because mongo + date + aggregate does not work.
   parsedBeginDate = new Date(beginDate).getTime();
@@ -117,8 +97,8 @@ const getHistoricData = function (deviceID, beginDate, endDate) {
   };
 
 
-  if (identifier.includes('-')) {
-    var identifierSplits = identifier.split('-');
+  if (identifier.includes('|')) {
+    var identifierSplits = identifier.split('|');
     identifier = identifierSplits[0];
     var deviceNumber = identifierSplits[1];
   };
@@ -133,12 +113,18 @@ const getHistoricData = function (deviceID, beginDate, endDate) {
         var agg = [
           `[
               {"$match": { "$and": [{ "deviceNumber" : ${deviceNumber} },{ "${subdoc}": { "$exists": 1 } } , {"${subdoc}.timestamp" : { "$gte" : ${parsedBeginDate}, "$lte" : ${parsedEndDate} }}] } } ,
+              {"$project":{"_id" : 0, "__v" : 0, "${subdoc}._id" : 0}},
               {"$sort":{"${subdoc}.timestamp" : 1}}              
             ]`
         ];
-        console.log(agg)
         agg = JSON.parse(agg);
-        model.aggregate(agg).then((data) => { resolve(data) });
+        model.aggregate(agg).allowDiskUse(true).then((data) => {
+          data.forEach(x => {
+            var timestamp = x[subdoc]["timestamp"];
+            x[subdoc]["timestamp"] = new Date(timestamp).toISOString();
+          })
+          resolve(data)
+        });
       }
       else {
         model.aggregate([
@@ -164,7 +150,19 @@ const getHistoricData = function (deviceID, beginDate, endDate) {
           }
         ]).then((data) => {
           var agg = historicAggBuilder(data, beginDate, endDate);
-          model.aggregate(agg).then((data) => resolve(data));
+          var fields = data[0].fields;
+          model.aggregate(agg).allowDiskUse(true).then((data) => {
+            fields.forEach(x => {
+              if (x === "deviceNumber") { }
+              else {
+                data[0][x].forEach(y => {
+                  var timestamp = y[x]["timestamp"];
+                  y[x]["timestamp"] = new Date(timestamp);
+                });
+              }
+            })
+            resolve(data)
+          });
         });
       }
     } else resolve(reject);
@@ -182,8 +180,8 @@ const getCurrentData = function (deviceID) {
   };
 
 
-  if (identifier.includes('-')) {
-    var identifierSplits = identifier.split('-');
+  if (identifier.includes('|')) {
+    var identifierSplits = identifier.split('|');
     identifier = identifierSplits[0];
     var deviceNumber = identifierSplits[1];
   };
@@ -197,13 +195,21 @@ const getCurrentData = function (deviceID) {
         deviceNumber = parseInt(deviceNumber, 10);
         var agg = [
           `[
-            {"$match": { "$and": [{ "deviceNumber" : ${deviceNumber} },{ "${subdoc}": { "$exists": 1 } } ] }},
             {"$sort":{"${subdoc}.timestamp" : 1}},
+            {"$limit : 4000},
+            {"$match": { "$and": [{ "deviceNumber" : ${deviceNumber} },{ "${subdoc}": { "$exists": 1 } } ] }},            
+            {"$project":{"_id" : 0, "__v" : 0, "${subdoc}._id" : 0}},
             {"$limit" : 1}
           ]`
         ];
         agg = JSON.parse(agg);
-        model.aggregate(agg).then((data) => { resolve(data) });
+        model.aggregate(agg).allowDiskUse(true).then((data) => {
+          data.forEach(x => {
+            var timestamp = x[subdoc]["timestamp"];
+            x[subdoc]["timestamp"] = new Date(timestamp).toISOString();
+          })
+          resolve(data)
+        });
       }
       else {
         model.aggregate([
@@ -229,15 +235,29 @@ const getCurrentData = function (deviceID) {
           }
         ]).then((data) => {
           var agg = aggBuilder(data);
-          model.aggregate(agg).then((data) => resolve(data));
+          var fields = data[0].fields;
+          model.aggregate(agg).allowDiskUse(true).then((data) => {
+            fields.forEach(x => {
+              if (x === "deviceNumber") { }
+              else {
+                try {
+                  var timestamp = data[0][x]["timestamp"];
+                  data[0][x]["timestamp"] = new Date(timestamp);
+                } catch (error) {
+                  console.log(error);
+                }
+              }
+            })
+            resolve(data);
+          });
         });
       }
     } else resolve(reject);
   });
 }
 
+// Should be JSON object from start not string parsed to JSON.
 function historicAggBuilder(data, startDate, endDate) {
-  //data[0].fields = ["testData1", "testData2", "testData3"]
 
   startDate = new Date(startDate).getTime();
   endDate = new Date(endDate).getTime();
@@ -247,32 +267,37 @@ function historicAggBuilder(data, startDate, endDate) {
     if (x === "deviceNumber") { }
     else {
       agg += `"${x}" : [`
-      agg += `{ "$match": { "$and": [ { "${x}" : {"$exists" : 1}},{"${x}.timestamp" : { "$gt" : ${startDate}, "$lt" : ${endDate} } } ] } }`
-      agg += `], `
+      agg += `{ "$match": { "$and": [ { "${x}" : {"$exists" : 1}},{"${x}.timestamp" : { "$gt" : ${startDate}, "$lt" : ${endDate} } } ] } },`
+      agg += `{ "$project": { "_id": 0, "__v": 0, "${x}._id" : 0} }`
+      agg += `],`
     }
   });
 
   agg = agg.substring(0, agg.length - 2);
 
+  agg += `]`
   agg += `}}`
   agg += `]`
-  console.log(agg);
+  
   agg = JSON.parse(agg);
 
   return agg;
 }
 
+// Should be JSON object from start not string parsed to JSON.
 function aggBuilder(data) {
-  //data[0].fields = ["testData1", "testData2", "testData3"]
 
   var agg = `[`
+  agg += `{"$sort" : {"timestamp" : 1}),`
+  agg += `{"$limit" : 4000},`
   agg += `{
   "$facet" : {
     `
   data[0].fields.forEach(x => {
     agg += `"${x}" : [`
-    agg += `{ "$match": { "${x}": { "$exists": 1 } } }, `
-    agg += `{ "$sort": { "${x}.timestamp": -1 } }, `
+    agg += `{ "$match": { "${x}": { "$exists": 1 } } },`
+    agg += `{ "$sort": { "${x}.timestamp": 1 } },`
+    agg += `{ "$project": { "_id": 0, "__v": 0, "${x}._id" : 0 } },`
     agg += `{ "$group": {`
     agg += `"_id": null,`
     agg += `"lastItem": { "$last": "$$ROOT" }`
@@ -280,7 +305,7 @@ function aggBuilder(data) {
     agg += `{"$project": {`
     agg += `"_id" : "$lastItem.${x}"`
     agg += `}}`
-    agg += `], `
+    agg += `],`
   });
 
   agg = agg.substring(0, agg.length - 1);
@@ -288,7 +313,7 @@ function aggBuilder(data) {
   agg += `}}, `
   agg += `{"$project" : {`
   data[0].fields.forEach(x => {
-    agg += `"${x}" : { "$arrayElemAt": ["$${x}", 0] }, `
+    agg += `"${x}" : { "$arrayElemAt": ["$${x}", 0] },`
   })
 
   agg = agg.substring(0, agg.length - 1);
@@ -296,7 +321,7 @@ function aggBuilder(data) {
   agg += `}}, `
   agg += `{"$project" : {    `
   data[0].fields.forEach(x => {
-    agg += `"${x}" : "$${x}._id", `
+    agg += `"${x}" : "$${x}._id",`
   })
 
   agg = agg.substring(0, agg.length - 1);
@@ -304,35 +329,17 @@ function aggBuilder(data) {
   agg += `}}, `
   agg += `{"$project" : {    `
   data[0].fields.forEach(x => {
-    agg += `"${x}" : { "_id" : 0 }, `
+    agg += `"${x}" : { "_id" : 0 },`
   })
 
   agg = agg.substring(0, agg.length - 1);
 
-  agg += `}} `
+  agg += `}}`
   agg += `]`
 
   agg = JSON.parse(agg);
   return agg;
 }
-
-app.post('/data', (req, res) => {
-  var identifier = req.body.identifier;
-  var model = schemas[identifier];
-  if (!(model === undefined)) {
-    var data = new model(req.body.data);
-    data.save((err, data) => {
-      if (err) {
-        res.status(400).json(err.message);
-      }
-      res.status(200).json(data);
-    });
-  } else {
-    res.status(400).json({ "Error": "Identifier not found" });
-  }
-})
-
-//app.listen(1337);
 
 module.exports = {
   saveData,

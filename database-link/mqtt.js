@@ -44,14 +44,18 @@ client.on('message', function (topic, message) {
 			var bufferdata = Object.entries(object.data);
 			bufferdata.forEach(buffer => {
 				var idValue = buffer[0]; //key value of attribute
+				//console.log(buffer);
 				buffer[1].forEach(e => { //loop through array
 					//console.log("Identiefier: " + object.identifier + "/" + idValue+  " Timestamp: " + e.timestamp + '\n' + "data: " + JSON.stringify(e));
 					//e.identifier = object.identifier + "/" + idValue;
+
 					var send = {};
 					send.identifier = object.identifier;
+
 					var data = {};
 					data[idValue] = e;
-					data.timestamp = object.timestamp;
+					data[idValue].timestamp = new Date(e.timestamp);
+					data.timestamp = new Date(object.timestamp);
 					send.data = data;
 					//console.log(send);
 					database.saveData(send);
@@ -67,11 +71,11 @@ client.on('message', function (topic, message) {
 			var send = {};
 			send.identifier = object.identifier;
 			send.data = object.data;
-			send.timestamp = object.timestamp;
+			send.timestamp = new Date(object.timestamp);
 			//console.log(send);
 			database.saveData(send);
 		}
-    } catch (error) {
+    } catch (error) {	
         
     }
 

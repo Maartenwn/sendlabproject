@@ -1,0 +1,3 @@
+- autostart.sh script that is called on startup node docker
+- config.js config file voor de node applications TI-Cloud
+- config-test.js config file voor de node applications TI-Cloud-Test

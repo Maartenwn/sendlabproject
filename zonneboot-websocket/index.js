@@ -45,8 +45,8 @@ wss.on('connection', ws => {
     });
 
     websocketConversion.initWebsocketConversion(ws);
-
-    const client = mqtt.connect(brokerOptions);
+	
+    let client = mqtt.connect(brokerOptions);
 
     client.on('error', function (err) {
         console.log(JSON.stringify(err))
@@ -71,4 +71,6 @@ wss.on('connection', ws => {
         }
     })
 })
+
+
 

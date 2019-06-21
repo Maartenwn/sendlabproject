@@ -1,0 +1,18 @@
+- addCert.sh : script voor maken van certificates
+- ca.crt : certificate file voor de certificate authority
+- ca.key : key file van de certificate authority !!!niet versturen anders kan iedereen certificates maken
+- mappen: naam van de identifier met bijbehoordende certificates
+
+
+- uitvoeren scriptje addCert.sh : 
+
+1. Voer de naam in van de nieuwe identifier bv weerstation.
+2. Voer het wachtwoord in van de Certificate Authority
+3. Dan om deze identifier toegang te geven tot de broker moet je de volgende file aanpassen : 
+	/mqtt/mosquitto/acl
+
+4. Als deze device data moet opslaan moet je hem write toegang geven tot data/"identifier naam" en LWT
+en read toegang tot events/"identifier-naam" !let hoofdletter gevoelig
+
+
+

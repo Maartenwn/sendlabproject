@@ -1,0 +1,4 @@
+ - certs: map met alle certificaten die toegang hebben tot de broker
+ - mosquitto: map met alle instellings files die mosquitto nodig heeft voor het draaien
+ - autostart.sh: script dat wordt uitgevoerd bij opstart van de mqtt docker 
+ - Dockerfile: dockerfile behoordende tot de mqtt docker
