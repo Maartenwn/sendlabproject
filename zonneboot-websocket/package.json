@@ -20,7 +20,7 @@
     "express": "^4.16.4",
     "fs": "0.0.1-security",
     "https": "^1.0.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "mqtt": "^2.18.8",
     "mqtt-packet": "^5.6.1",
     "websocket": "^1.0.28"
