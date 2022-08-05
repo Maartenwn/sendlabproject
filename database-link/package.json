@@ -21,7 +21,7 @@
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "fs": "0.0.1-security",
-    "mongoose": "^5.5.13",
+    "mongoose": "^5.7.5",
     "mqtt": "^2.18.8",
     "swagger-jsdoc": "^3.2.9",
     "swagger-ui-express": "^4.0.2"
